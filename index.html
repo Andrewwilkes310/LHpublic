@@ -3,959 +3,1017 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Longevity Health</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Longevity Health — My Health</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F5EFE6;--surface:#EEE5D8;--card:#FDFAF6;--white:#FFFFFF;
-  --text:#2C1F0E;--muted:#9E8E7A;--sub:#6B5C48;
-  --border:#DDD0BC;--pill:#EBE2D5;
-  --brand:#7A4F2D;--brand-dark:#5A3820;--brand-light:#F0E4D7;
+  --bg:#F5EFE6;
+  --surface:#EEE5D8;
+  --card:#FDFAF6;
+  --white:#FFFFFF;
+  --text:#2C1F0E;
+  --muted:#9E8E7A;
+  --sub:#6B5C48;
+  --border:#DDD0BC;
+  --pill:#EBE2D5;
+  --brand:#7A4F2D;
+  --brand-dark:#4A2E18;
+  --brand-light:#F0E4D7;
+  --brand-mid:#C4956A;
   --red:#D94F3D;--orange:#E07B39;--amber:#D4A020;--lime:#7AB648;--green:#3D9E5F;--blue:#3B7DD8;
   --red-bg:#FDECEA;--orange-bg:#FEF0E6;--amber-bg:#FEF8E6;--green-bg:#E6F4EC;--blue-bg:#E8F0FC;
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.page{display:none}
-.page.active{display:flex;flex-direction:column;min-height:100vh}
 
-/* NAV */
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+
+/* ── TOP NAV ── */
 .topnav{
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;height:60px;background:var(--bg);
-  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;
+  padding:0 28px;height:58px;background:var(--brand-dark);
+  position:sticky;top:0;z-index:100;
 }
-.brand{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
-.brand-name{font-size:15px;font-weight:600;color:var(--text)}
-.user-pill{
-  display:flex;align-items:center;gap:8px;background:var(--brand-dark);
-  color:#F5EDE0;border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer}
+.brand-name{font-size:15px;font-weight:600;color:#F5E6D0;letter-spacing:.01em}
+.nav-links{display:flex;gap:4px}
+.nl{
+  padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;
+  color:rgba(245,230,208,.55);cursor:pointer;transition:all .15s;
 }
-.ua{width:28px;height:28px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#F5EDE0}
-.un{font-size:13px;font-weight:500}
-
-/* LAYOUT */
-.layout{display:flex;flex:1}
-.sidebar{width:200px;padding:16px 10px;flex-shrink:0;border-right:1px solid var(--border)}
-.nav-item{
-  display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:9px;
-  font-size:13.5px;font-weight:500;color:var(--sub);cursor:pointer;transition:background .15s;margin-bottom:2px;
+.nl.active{color:#F5E6D0;background:rgba(255,255,255,.12)}
+.nl:hover:not(.active){color:rgba(245,230,208,.85)}
+.user-nav{display:flex;align-items:center;gap:10px}
+.user-av{
+  width:32px;height:32px;border-radius:50%;background:var(--brand-mid);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#F5E6D0;cursor:pointer;
 }
-.nav-item.active{background:var(--surface);color:var(--text)}
-.nav-item:hover:not(.active){background:rgba(0,0,0,0.04)}
-.ni{width:17px;height:17px;flex-shrink:0}
-.nb{margin-left:auto;font-size:10px;font-weight:600;background:#FDECEA;color:var(--red);padding:2px 6px;border-radius:999px}
-.main{flex:1;overflow-y:auto}
+.user-greet{font-size:13px;color:rgba(245,230,208,.7)}
 
-/* PATIENT HEADER */
-.pt-header{padding:28px 40px 0}
-.back-btn{
-  display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);
-  cursor:pointer;background:var(--pill);border:none;border-radius:999px;padding:6px 14px;
-  margin-bottom:20px;transition:background .15s;font-family:'DM Sans',sans-serif;
+/* ── CONTENT ── */
+.content{flex:1;padding:40px 44px;max-width:1200px;margin:0 auto;width:100%}
+
+/* ── HERO ── */
+.hero{
+  background:var(--brand-dark);border-radius:24px;padding:40px 44px;
+  margin-bottom:28px;position:relative;overflow:hidden;
 }
-.back-btn:hover{background:var(--border)}
-.pt-name-row{display:flex;align-items:center;gap:16px;margin-bottom:8px}
-.pt-avatar{
-  width:52px;height:52px;border-radius:50%;background:var(--pill);
-  display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;
-  color:var(--sub);border:2px solid var(--border);flex-shrink:0;
+.hero::before{
+  content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;
+  border-radius:50%;background:radial-gradient(circle,rgba(196,149,106,.2) 0%,transparent 70%);
 }
-.pt-name{font-family:'Fraunces',serif;font-size:36px;font-weight:300;line-height:1}
-.pt-tags{display:flex;gap:8px;margin-bottom:20px;margin-left:68px}
-.pt-tag{font-size:12px;color:var(--sub);background:var(--pill);padding:4px 12px;border-radius:999px}
-
-/* PATIENT TABS */
-.pt-tabs{
-  display:flex;gap:0;border-bottom:1px solid var(--border);
-  padding:0 40px;margin-bottom:0;
+.hero::after{
+  content:'';position:absolute;bottom:-40px;left:30%;width:200px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(122,79,45,.15) 0%,transparent 70%);
 }
-.pt-tab{
-  padding:11px 18px;font-size:13.5px;font-weight:500;color:var(--muted);
-  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;white-space:nowrap;
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px}
+.hero-greeting{font-size:13px;font-weight:500;color:var(--brand-mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.hero-name{font-family:'Fraunces',serif;font-size:38px;font-weight:200;color:#F5E6D0;line-height:1.1}
+.hero-sub{font-size:14px;color:rgba(245,230,208,.55);margin-top:6px}
+.hero-score-wrap{text-align:right}
+.hero-score-label{font-size:11px;font-weight:600;color:var(--brand-mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.hero-score{font-family:'Fraunces',serif;font-size:72px;font-weight:200;color:#F5E6D0;line-height:1}
+.hero-score-sub{font-size:12px;color:rgba(245,230,208,.45);margin-top:2px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.hstat{background:rgba(255,255,255,.06);border-radius:14px;padding:16px 18px;border:1px solid rgba(255,255,255,.08)}
+.hstat-val{font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:#F5E6D0;line-height:1;margin-bottom:4px}
+.hstat-label{font-size:11px;color:rgba(245,230,208,.5);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.hstat-trend{font-size:11px;margin-top:6px;font-weight:600}
+.trend-up{color:#7AB648}.trend-down{color:#D94F3D}.trend-flat{color:var(--amber)}
+
+/* ── SECTION ── */
+.section{margin-bottom:32px}
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-title{font-family:'Fraunces',serif;font-size:22px;font-weight:300}
+.sec-link{font-size:13px;color:var(--brand);cursor:pointer;font-weight:500}
+.sec-link:hover{text-decoration:underline}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:24px}
+.card-sm{padding:16px 20px}
+.card-hover{transition:all .2s;cursor:pointer}
+.card-hover:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(100,60,20,.1);border-color:var(--brand-mid)}
+
+/* ── TODAY'S TASKS ── */
+.task-item{
+  display:flex;align-items:center;gap:14px;padding:14px 0;
+  border-bottom:1px solid var(--border);
 }
-.pt-tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:600}
-.pt-tab:hover:not(.active){color:var(--sub)}
-
-/* TAB CONTENT */
-.tab-content{padding:32px 40px}
-
-/* CARDS */
-.card{background:var(--card);border-radius:16px;border:1px solid var(--border);padding:24px}
-.card-white{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:24px}
-.card-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
-
-/* OVERVIEW GRID */
-.ov-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:16px;margin-bottom:16px}
-.ov-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-
-/* RISK METER */
-.risk-dial{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0}
-.risk-arc{width:120px;height:64px;position:relative;overflow:hidden;margin-bottom:8px}
-.risk-arc svg{width:120px;height:120px;position:absolute;top:0;left:0}
-.risk-label-main{font-family:'Fraunces',serif;font-size:22px;font-weight:300;text-align:center}
-.risk-label-sub{font-size:12px;color:var(--muted);text-align:center}
-
-/* ADHERENCE SVG CHART */
-.adh-chart{width:100%;height:100px;margin-top:4px}
-
-/* MINI STAT */
-.mini-stat-val{font-family:'Fraunces',serif;font-size:42px;font-weight:300;line-height:1;margin-bottom:4px}
-.mini-stat-label{font-size:12px;color:var(--muted);font-weight:500}
-.mini-stat-sub{font-size:11px;color:var(--muted);margin-top:8px}
-
-/* LAST CHECKIN */
-.checkin-time{font-family:'Fraunces',serif;font-size:26px;font-weight:300;margin-bottom:4px}
-
-/* PROGRESS RING */
-.ring-wrap{display:flex;align-items:center;justify-content:center;margin:8px 0}
-
-/* TREND PILLS */
-.trend-up{font-size:11px;background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:999px;font-weight:600}
-.trend-down{font-size:11px;background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:999px;font-weight:600}
-.trend-flat{font-size:11px;background:var(--amber-bg);color:var(--amber);padding:2px 8px;border-radius:999px;font-weight:600}
-
-/* TIMELINE TOGGLE */
-.time-toggle{display:flex;gap:0;background:var(--surface);border-radius:8px;padding:3px;width:fit-content;margin-bottom:12px}
-.tt{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
-.tt.active{background:var(--white);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-
-/* PATIENT DETAILS */
-.pd-section{margin-bottom:32px}
-.pd-section-title{font-size:18px;font-weight:600;margin-bottom:4px}
-.pd-section-hint{font-size:12px;color:var(--muted);margin-bottom:20px}
-.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.pd-field label{display:block;font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
-.pd-input{
-  width:100%;padding:11px 14px;background:var(--white);border:1.5px solid var(--border);
-  border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);
-  outline:none;transition:border-color .2s;
+.task-item:last-child{border-bottom:none}
+.task-check{
+  width:22px;height:22px;border-radius:50%;border:2px solid var(--border);
+  flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
 }
-.pd-input:focus{border-color:var(--brand)}
-.tag-pill{
-  display:inline-flex;align-items:center;gap:6px;background:var(--text);color:white;
-  padding:5px 12px;border-radius:999px;font-size:13px;font-weight:500;margin-right:8px;margin-bottom:8px;
-}
-.tag-pill .x{cursor:pointer;opacity:.7;font-size:14px}
-.tag-add{
-  display:inline-flex;align-items:center;gap:4px;background:transparent;
-  border:1.5px dashed var(--border);color:var(--muted);padding:5px 12px;
-  border-radius:999px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;
-  transition:border-color .2s;
-}
-.tag-add:hover{border-color:var(--brand);color:var(--brand)}
+.task-check.done{background:var(--green);border-color:var(--green)}
+.task-check.done::after{content:'✓';color:white;font-size:11px;font-weight:700}
+.task-text{font-size:14px;font-weight:500;flex:1}
+.task-text.done{text-decoration:line-through;color:var(--muted)}
+.task-time{font-size:12px;color:var(--muted);flex-shrink:0}
+.task-category{font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.tc-supplement{background:var(--blue-bg);color:var(--blue)}
+.tc-exercise{background:var(--green-bg);color:var(--green)}
+.tc-lab{background:var(--amber-bg);color:var(--amber)}
+.tc-habit{background:var(--brand-light);color:var(--brand)}
 
-/* CARE PLAN */
-.cp-upload{
-  border:2px dashed var(--border);border-radius:14px;padding:48px 24px;
-  text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:24px;
+/* ── LAB BIOMARKER CARDS (Function Health style) ── */
+.bio-card{
+  background:var(--card);border-radius:18px;border:1px solid var(--border);
+  padding:20px;cursor:pointer;transition:all .2s;
 }
-.cp-upload:hover{border-color:var(--brand);background:var(--brand-light)}
-.cp-upload-icon{font-size:32px;margin-bottom:12px}
-.cp-upload-title{font-size:16px;font-weight:600;margin-bottom:4px}
-.cp-upload-sub{font-size:13px;color:var(--muted)}
-.cp-field label{display:block;font-size:13px;font-weight:600;margin-bottom:8px}
-.cp-field{margin-bottom:20px}
-.cp-textarea{
-  width:100%;padding:12px 14px;background:var(--white);border:1.5px solid var(--border);
-  border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);
-  outline:none;resize:vertical;min-height:80px;transition:border-color .2s;
-}
-.cp-textarea:focus{border-color:var(--brand)}
-.accordion{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;background:var(--white)}
-.accordion-header{
-  display:flex;align-items:center;justify-content:space-between;padding:16px 20px;
-  cursor:pointer;font-size:14px;font-weight:600;
-}
-.accordion-body{padding:0 20px 20px;display:none}
-.accordion-body.open{display:block}
-.cp-protocol-card{
-  background:var(--card);border-radius:12px;border:1px solid var(--border);
-  padding:16px 20px;display:flex;gap:14px;margin-bottom:10px;
-}
-.cp-step-num{
-  width:28px;height:28px;border-radius:50%;background:var(--brand-light);
-  display:flex;align-items:center;justify-content:center;font-size:11px;
-  font-weight:700;color:var(--brand);flex-shrink:0;margin-top:1px;
-}
-.cp-step-title{font-size:14px;font-weight:600;margin-bottom:3px}
-.cp-step-desc{font-size:13px;color:var(--sub);line-height:1.5}
-.cp-step-freq{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
+.bio-card:hover{border-color:var(--brand-mid);transform:translateY(-1px);box-shadow:0 6px 20px rgba(100,60,20,.08)}
+.bio-icon{font-size:22px;margin-bottom:10px}
+.bio-name{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.bio-val{font-family:'Fraunces',serif;font-size:30px;font-weight:300;line-height:1;margin-bottom:2px}
+.bio-unit{font-size:13px;color:var(--muted);font-weight:400}
+.bio-ref{font-size:11px;color:var(--muted);margin-bottom:8px}
+.bio-bar-track{height:5px;background:var(--pill);border-radius:999px;overflow:hidden;margin-bottom:6px}
+.bio-bar-fill{height:100%;border-radius:999px;transition:width .8s ease}
+.bio-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;width:fit-content}
+.bs-green{background:var(--green-bg);color:var(--green)}
+.bs-amber{background:var(--amber-bg);color:var(--amber)}
+.bs-red{background:var(--red-bg);color:var(--red)}
 
-/* LABS */
-.lab-header-row{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:0;padding:8px 16px;background:var(--surface);border-radius:8px;margin-bottom:8px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.lab-row{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr;gap:0;padding:14px 16px;background:var(--white);border-radius:10px;margin-bottom:6px;align-items:center;border:1px solid var(--border)}
-.lab-name{font-size:14px;font-weight:500}
-.lab-date{font-size:11px;color:var(--muted);margin-top:2px}
-.lab-val{font-size:15px;font-weight:700}
-.lab-range{font-size:11px;color:var(--muted);margin-top:1px}
-.lab-bar-wrap{padding-right:8px}
-.lab-bar-track{height:6px;background:var(--pill);border-radius:999px;overflow:hidden;margin-top:4px}
-.lab-bar-fill{height:100%;border-radius:999px}
-.lab-section-title{font-size:15px;font-weight:600;margin:20px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+/* ── SCORE RING ── */
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
 
-/* NOTES */
-.note-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.note-type-card{
-  background:var(--white);border:1.5px solid var(--border);border-radius:14px;
-  padding:20px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:16px;
+/* ── ADHERENCE BAR ── */
+.adh-week{display:flex;gap:6px;align-items:flex-end;height:60px;margin-top:8px}
+.adh-day{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.adh-bar{width:100%;border-radius:4px 4px 0 0;min-height:3px;transition:height .6s ease}
+.adh-lbl{font-size:9px;color:var(--muted)}
+
+/* ── PROTOCOL ITEM ── */
+.protocol-row{
+  display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;
 }
-.note-type-card:hover{border-color:var(--brand);box-shadow:0 2px 12px rgba(122,79,45,.1)}
-.note-type-card.primary{background:var(--text);border-color:var(--text);color:white}
-.note-type-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.note-icon-dark{background:rgba(255,255,255,.15)}
-.note-icon-light{background:var(--brand-light)}
-.note-type-title{font-size:14px;font-weight:600;margin-bottom:2px}
-.note-type-sub{font-size:12px;opacity:.65}
-.note-subtabs{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:10px;width:fit-content;margin-bottom:20px}
-.note-subtab{padding:7px 18px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
-.note-subtab.active{background:var(--white);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.note-empty{border:2px dashed var(--border);border-radius:12px;padding:48px;text-align:center;color:var(--muted);font-size:14px}
-.soap-form{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:24px;display:none}
-.soap-form.open{display:block}
-.soap-section{margin-bottom:16px}
-.soap-section label{display:block;font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
-.soap-section textarea{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);resize:vertical;min-height:70px;outline:none;transition:border-color .2s;background:var(--card)}
-.soap-section textarea:focus{border-color:var(--brand)}
+.protocol-row:last-child{border-bottom:none}
+.proto-icon{
+  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.proto-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.proto-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.proto-freq{font-size:11px;font-weight:600;color:var(--brand);margin-top:4px}
+.proto-check{
+  margin-left:auto;width:24px;height:24px;border-radius:50%;border:2px solid var(--border);
+  flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;margin-top:6px;
+}
+.proto-check.done{background:var(--green);border-color:var(--green)}
+.proto-check.done::after{content:'✓';color:white;font-size:10px;font-weight:700}
 
-/* WEARABLE */
-.wd-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
-.wd-metric{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:20px}
-.wd-icon{font-size:24px;margin-bottom:10px}
-.wd-val{font-family:'Fraunces',serif;font-size:32px;font-weight:300;line-height:1;margin-bottom:2px}
-.wd-unit{font-size:13px;color:var(--muted);display:inline;margin-left:4px}
-.wd-label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:8px}
-.wd-sparkline{width:100%;height:40px}
+/* ── MESSAGE PREVIEW ── */
+.msg-preview-row{
+  display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;
+  transition:background .15s;border-radius:8px;padding:12px;
+}
+.msg-preview-row:hover{background:var(--surface)}
+.mp-av{
+  width:38px;height:38px;border-radius:50%;background:var(--brand-light);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  color:var(--brand);flex-shrink:0;
+}
+.mp-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.mp-text{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.mp-time{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.mp-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);flex-shrink:0}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:10px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:opacity .15s}
-.btn-dark{background:var(--brand-dark);color:#F5EDE0}
+/* ── WEARABLE METRIC ── */
+.wear-card{
+  background:var(--card);border-radius:18px;border:1px solid var(--border);padding:20px;
+}
+.wear-icon{font-size:26px;margin-bottom:8px}
+.wear-val{font-family:'Fraunces',serif;font-size:36px;font-weight:200;line-height:1;margin-bottom:2px}
+.wear-unit{font-size:14px;color:var(--muted)}
+.wear-label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:10px}
+.wear-goal{font-size:11px;color:var(--muted);margin-top:8px}
+.wear-goal span{font-weight:700;color:var(--text)}
+.mini-spark{width:100%;height:36px;margin-top:6px}
+
+/* ── INSIGHT CARD ── */
+.insight-card{
+  background:linear-gradient(135deg,var(--brand-dark) 0%,#3D2412 100%);
+  border-radius:18px;padding:20px 24px;color:#F5E6D0;
+  border:1px solid rgba(196,149,106,.2);
+}
+.ins-badge{font-size:10px;font-weight:600;background:rgba(196,149,106,.2);color:var(--brand-mid);padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;width:fit-content}
+.ins-title{font-family:'Fraunces',serif;font-size:18px;font-weight:300;margin-bottom:6px;line-height:1.3}
+.ins-body{font-size:13px;color:rgba(245,230,208,.65);line-height:1.6}
+.ins-action{font-size:12px;font-weight:600;color:var(--brand-mid);margin-top:12px;cursor:pointer}
+.ins-action:hover{text-decoration:underline}
+
+/* ── LABS PAGE ── */
+.labs-hero{
+  background:var(--brand-dark);border-radius:20px;padding:28px 32px;
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;
+}
+.labs-hero-left .label{font-size:11px;font-weight:600;color:var(--brand-mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.labs-hero-left .title{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:#F5E6D0;margin-bottom:4px}
+.labs-hero-left .sub{font-size:13px;color:rgba(245,230,208,.5)}
+.labs-score-grid{display:flex;gap:20px}
+.lscore{text-align:center;background:rgba(255,255,255,.07);border-radius:12px;padding:14px 20px;border:1px solid rgba(255,255,255,.08)}
+.lscore-val{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:#F5E6D0;line-height:1}
+.lscore-label{font-size:10px;color:rgba(245,230,208,.5);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.lab-cat-title{font-size:16px;font-weight:600;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.bio-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+
+/* ── MESSAGES PAGE ── */
+.msg-layout{display:grid;grid-template-columns:300px 1fr;gap:0;flex:1;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--card)}
+.msg-list-panel{border-right:1px solid var(--border);overflow-y:auto}
+.msg-list-hdr{padding:20px;border-bottom:1px solid var(--border);font-family:'Fraunces',serif;font-size:20px;font-weight:300}
+.msg-item{display:flex;gap:12px;padding:14px 18px;cursor:pointer;transition:background .15s;border-left:3px solid transparent}
+.msg-item:hover{background:var(--surface)}
+.msg-item.active{background:var(--surface);border-left-color:var(--brand)}
+.m-av{width:40px;height:40px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--brand);flex-shrink:0}
+.m-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.m-prev{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+.m-time{font-size:11px;color:var(--muted);margin-left:auto}
+.msg-main-panel{display:flex;flex-direction:column}
+.msg-main-hdr{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.msg-thread-area{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;max-height:450px}
+.bw{display:flex;gap:10px}
+.bw.me{flex-direction:row-reverse}
+.bav{width:32px;height:32px;border-radius:50%;background:var(--pill);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sub);flex-shrink:0}
+.bubble{max-width:65%;padding:12px 16px;font-size:14px;line-height:1.5}
+.b-them{background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 16px 4px}
+.b-me{background:var(--brand-dark);color:#F5E6D0;border-radius:16px 16px 4px 16px}
+.b-time{font-size:10px;color:var(--muted);margin-top:3px}
+.msg-input-area{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px}
+.msg-textarea{flex:1;padding:11px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;resize:none}
+.msg-textarea:focus{border-color:var(--brand)}
+
+/* ── PROFILE ── */
+.profile-hero{
+  background:var(--brand-dark);border-radius:20px;padding:32px 36px;
+  display:flex;align-items:center;gap:24px;margin-bottom:24px;
+}
+.prof-av{
+  width:80px;height:80px;border-radius:50%;background:var(--brand-mid);
+  display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;
+  color:#F5E6D0;flex-shrink:0;border:3px solid rgba(255,255,255,.15);
+}
+.prof-name{font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:#F5E6D0;margin-bottom:4px}
+.prof-goal{font-size:14px;color:rgba(245,230,208,.6);margin-bottom:10px}
+.prof-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(245,230,208,.8);padding:4px 12px;border-radius:999px;font-size:12px;margin-right:8px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:10px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-dark{background:var(--brand-dark);color:#F5E6D0}
 .btn-dark:hover{opacity:.85}
 .btn-light{background:var(--pill);color:var(--sub);border:1px solid var(--border)}
 .btn-light:hover{background:var(--border)}
-.btn-sm{padding:7px 14px;font-size:12.5px}
+.btn-sm{padding:7px 14px;font-size:12px}
+.btn-brand{background:var(--brand);color:#F5E6D0}
 
-/* BADGES */
+/* ── FORM ── */
+.field label{display:block;font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--brand)}
+
+/* ── BADGE ── */
 .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500}
 .b-green{background:var(--green-bg);color:var(--green)}
 .b-red{background:var(--red-bg);color:var(--red)}
-.b-orange{background:var(--orange-bg);color:var(--orange)}
 .b-amber{background:var(--amber-bg);color:var(--amber)}
 .b-blue{background:var(--blue-bg);color:var(--blue)}
 .b-gray{background:var(--pill);color:var(--muted)}
 
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--bg);border-radius:18px;padding:32px;width:500px;max-width:90vw;box-shadow:0 24px 80px rgba(0,0,0,.2);animation:mIn .2s ease}
-@keyframes mIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-.modal-title{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:22px}
-.mf{display:flex;gap:12px;justify-content:flex-end;margin-top:22px}
-
-/* FADE */
-.fade{opacity:0;animation:fi .3s ease forwards}
+/* ── ANIMATIONS ── */
+.fade-in{opacity:0;animation:fi .35s ease forwards}
 @keyframes fi{to{opacity:1}}
+.slide-up{opacity:0;transform:translateY(12px);animation:su .4s ease forwards}
+@keyframes su{to{opacity:1;transform:translateY(0)}}
 
-/* SCROLLBAR */
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px}
 
-/* MESSAGES PAGE */
-.msg-layout{display:grid;grid-template-columns:280px 1fr;flex:1}
-.msg-list{border-right:1px solid var(--border);overflow-y:auto}
-.msg-list-header{padding:20px 20px 12px;font-family:'Fraunces',serif;font-size:20px;font-weight:300}
-.msg-item{display:flex;gap:12px;padding:13px 18px;cursor:pointer;transition:background .15s;border-left:3px solid transparent}
-.msg-item:hover{background:var(--surface)}
-.msg-item.active{background:var(--surface);border-left-color:var(--brand)}
-.m-av{width:38px;height:38px;border-radius:50%;background:var(--pill);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sub);flex-shrink:0}
-.m-name{font-size:13.5px;font-weight:600;margin-bottom:2px}
-.m-prev{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
-.m-time{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}
-.m-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);margin-top:5px;flex-shrink:0}
-.msg-main{display:flex;flex-direction:column}
-.msg-top{padding:18px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.msg-thread{flex:1;padding:20px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 220px)}
-.bw{display:flex;gap:10px}
-.bw.me{flex-direction:row-reverse}
-.bav{width:30px;height:30px;border-radius:50%;background:var(--pill);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sub);flex-shrink:0}
-.bubble{max-width:60%;padding:11px 15px;font-size:13.5px;line-height:1.5}
-.b-them{background:var(--white);border:1px solid var(--border);border-radius:16px 16px 16px 4px}
-.b-me{background:var(--brand-dark);color:#F5EDE0;border-radius:16px 16px 4px 16px}
-.b-time{font-size:10px;color:var(--muted);margin-top:3px}
-.msg-input-row{padding:14px 28px;border-top:1px solid var(--border);display:flex;gap:10px}
-.msg-in{flex:1;padding:11px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;resize:none}
-.msg-in:focus{border-color:var(--brand)}
+/* ── DETAIL MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg);border-radius:20px;padding:32px;width:540px;max-width:92vw;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.25);animation:mIn .2s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--pill);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted)}
 
-/* SETTINGS */
-.s-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:24px;margin-bottom:16px}
-.s-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
-.s-row:last-child{border-bottom:none}
-.s-label{font-size:14px;font-weight:500}
-.s-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.toggle{width:42px;height:22px;border-radius:999px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
-.toggle.on{background:var(--green)}
-.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
-.toggle.on::after{transform:translateX(20px)}
-
-/* PATIENT LIST PAGE */
-.pl-main{flex:1;padding:36px 44px}
-.pt-count{font-family:'Fraunces',serif;font-size:68px;font-weight:300;line-height:1;margin-bottom:32px}
-.tbl-head{display:grid;grid-template-columns:2fr 1.4fr 1.8fr .9fr;padding:0 18px 10px;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.pt-row{display:grid;grid-template-columns:2fr 1.4fr 1.8fr .9fr;align-items:center;background:var(--card);border-radius:13px;padding:14px 18px;margin-bottom:7px;cursor:pointer;transition:all .15s;border:1px solid transparent;opacity:0;animation:ri .4s ease forwards}
-.pt-row:hover{background:var(--white);box-shadow:0 2px 12px rgba(100,60,20,.08);border-color:var(--border)}
-@keyframes ri{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.pt-row:nth-child(1){animation-delay:.04s}.pt-row:nth-child(2){animation-delay:.08s}.pt-row:nth-child(3){animation-delay:.12s}.pt-row:nth-child(4){animation-delay:.16s}.pt-row:nth-child(5){animation-delay:.20s}.pt-row:nth-child(6){animation-delay:.24s}.pt-row:nth-child(7){animation-delay:.28s}
-.pi{display:flex;align-items:center;gap:12px}
-.pav{width:36px;height:36px;border-radius:50%;background:var(--pill);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sub);border:1.5px solid var(--border);flex-shrink:0}
-.pn{font-size:14px;font-weight:600;margin-bottom:2px}
-.pid{font-size:10.5px;color:var(--brand)}
-.ac{display:flex;align-items:center;gap:8px}
-.apct{font-size:14px;font-weight:700;min-width:34px}
-.atrk{flex:1;max-width:85px;height:5px;background:var(--pill);border-radius:999px;overflow:hidden}
-.afill{height:100%;border-radius:999px}
-.nt{font-size:12.5px;color:var(--sub);line-height:1.4}
-.nd{font-size:11px;color:var(--muted);margin-top:1px}
-.row-arrow{display:flex;align-items:center;justify-content:flex-end}
-.arr-btn{width:28px;height:28px;border-radius:50%;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:background .15s}
-.arr-btn:hover{background:var(--pill)}
-.arr-btn svg{width:14px;height:14px}
+/* ── PROGRESS RING ── */
+.progress-ring{transform:rotate(-90deg)}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-  PAGE: PATIENT LIST
-══════════════════════════════════════ -->
-<div id="pg-list" class="page active">
+<!-- ══════════════════════════════════
+  PAGE: DASHBOARD
+══════════════════════════════════ -->
+<div id="pg-home" class="page active">
   <nav class="topnav">
-    <div class="brand" onclick="show('pg-list')">
-      <svg width="28" height="28" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#7A4F2D" opacity=".15"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#7A4F2D" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#7A4F2D" stroke-width="1.3" stroke-linecap="round" opacity=".5"/></svg>
+    <div class="brand" onclick="nav('pg-home')">
+      <svg width="26" height="26" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#C4956A" opacity=".3"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#C4956A" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></svg>
       <span class="brand-name">Longevity Health</span>
     </div>
-    <div class="user-pill"><div class="ua">AW</div><span class="un">Andrew Wilkess</span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="#F5EDE0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="nav-links">
+      <div class="nl active" onclick="nav('pg-home')">Home</div>
+      <div class="nl" onclick="nav('pg-labs')">My Labs</div>
+      <div class="nl" onclick="nav('pg-protocol')">My Protocol</div>
+      <div class="nl" onclick="nav('pg-body')">My Body</div>
+      <div class="nl" onclick="nav('pg-messages')">Messages <span style="background:var(--brand-mid);color:#1a0e06;font-size:10px;padding:1px 6px;border-radius:999px;font-weight:700;margin-left:2px">1</span></div>
+    </div>
+    <div class="user-nav">
+      <span class="user-greet">Hi, Drew</span>
+      <div class="user-av" onclick="nav('pg-profile')">DW</div>
+    </div>
   </nav>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="nav-item active" onclick="show('pg-list')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="6" r="3"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Patients</div>
-      <div class="nav-item" onclick="show('pg-msgs')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4h12v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4z"/><path d="M3 4l6 5 6-5"/></svg>Messages<span class="nb">3</span></div>
-      <div class="nav-item" onclick="show('pg-settings')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1 1M12.9 12.9l1 1M4.1 13.9l1-1M12.9 5.1l1-1"/></svg>Settings</div>
-    </aside>
-    <main class="pl-main">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between">
-        <div><div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">My patients</div><div class="pt-count">7</div></div>
-        <button class="btn btn-dark" style="margin-top:8px" onclick="document.getElementById('m-add').classList.add('open')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="#F5EDE0" stroke-width="2" stroke-linecap="round"/></svg>Add patient</button>
+
+  <div class="content">
+    <!-- HERO -->
+    <div class="hero slide-up">
+      <div class="hero-top">
+        <div>
+          <div class="hero-greeting">Sunday, March 1, 2026</div>
+          <div class="hero-name">Good morning,<br><em>Drew.</em></div>
+          <div class="hero-sub">Your health is trending in the right direction.</div>
+        </div>
+        <div class="hero-score-wrap">
+          <div class="hero-score-label">Health Score</div>
+          <div class="hero-score">72</div>
+          <div class="hero-score-sub">↑ +4 from last week</div>
+        </div>
       </div>
-      <div class="tbl-head"><span>Patient</span><span>Last week adherence</span><span>Notes</span><span></span></div>
-      <div id="pt-list">
-        <div class="pt-row" onclick="openPt('drew')"><div class="pi"><div class="pav">DW</div><div><div class="pn">Drew Wilkes</div><div class="pid">01KJJXQTJ0NDP9DSGB2X7B4SV8</div></div></div><div class="ac"><span class="apct" style="color:var(--lime)">72%</span><div class="atrk"><div class="afill" style="width:72%;background:var(--lime)"></div></div></div><div><div class="nt">Follow-up — review lab panels</div><div class="nd">Next appt: Mar 6, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
-        <div class="pt-row" onclick="openPt('andrew')"><div class="pi"><div class="pav">AW</div><div><div class="pn">Andrew Wilkes</div><div class="pid">01KJJX6HYD516AXP385NW6KRTT</div></div></div><div class="ac"><span class="apct" style="color:var(--red)">0%</span><div class="atrk"><div class="afill" style="width:2%;background:var(--red)"></div></div></div><div><div class="nt">Onboarding — initial consult pending</div><div class="nd">Next appt: Mar 3, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
-        <div class="pt-row" onclick="openPt('maria')"><div class="pi"><div class="pav">MC</div><div><div class="pn">Maria Chen</div><div class="pid">01KJJX7RMC924BXP112LW9MNAT</div></div></div><div class="ac"><span class="apct" style="color:var(--green)">91%</span><div class="atrk"><div class="afill" style="width:91%;background:var(--green)"></div></div></div><div><div class="nt">Excellent compliance — adjust HRT Q2</div><div class="nd">Next appt: Apr 1, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
-        <div class="pt-row" onclick="openPt('robert')"><div class="pi"><div class="pav">RN</div><div><div class="pn">Robert Nguyen</div><div class="pid">01KJJX9KKRN482CXB884PQ3WTS</div></div></div><div class="ac"><span class="apct" style="color:var(--orange)">47%</span><div class="atrk"><div class="afill" style="width:47%;background:var(--orange)"></div></div></div><div><div class="nt">⚠ Missed 3 check-ins — call before visit</div><div class="nd">Next appt: Mar 12, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
-        <div class="pt-row" onclick="openPt('sandra')"><div class="pi"><div class="pav">SP</div><div><div class="pn">Sandra Patel</div><div class="pid">01KJJXB2SP731DXA220NQ8PVRT</div></div></div><div class="ac"><span class="apct" style="color:var(--lime)">83%</span><div class="atrk"><div class="afill" style="width:83%;background:var(--lime)"></div></div></div><div><div class="nt">Annual bloodwork ordered — results pending</div><div class="nd">Next appt: Mar 19, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
-        <div class="pt-row" onclick="openPt('james')"><div class="pi"><div class="pav">JH</div><div><div class="pn">James Harlow</div><div class="pid">01KJJXC4JH590EXB334QR7WZMK</div></div></div><div class="ac"><span class="apct" style="color:var(--red)">28%</span><div class="atrk"><div class="afill" style="width:28%;background:var(--red)"></div></div></div><div><div class="nt">⚠ Low engagement — consider protocol change</div><div class="nd">Next appt: Mar 5, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
-        <div class="pt-row" onclick="openPt('lynn')"><div class="pi"><div class="pav">LF</div><div><div class="pn">Lynn Foster</div><div class="pid">01KJJXD6LF803FXC447RS5YQNJ</div></div></div><div class="ac"><span class="apct" style="color:var(--amber)">61%</span><div class="atrk"><div class="afill" style="width:61%;background:var(--amber)"></div></div></div><div><div class="nt">Nutrition plan updated — recheck lipids 6 wks</div><div class="nd">Next appt: Apr 10, 2026</div></div><div class="row-arrow"><button class="arr-btn"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3l4 4-4 4"/></svg></button></div></div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-val">72%</div>
+          <div class="hstat-label">Weekly Adherence</div>
+          <div class="hstat-trend trend-up">↑ Up from 68%</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">620 <span style="font-size:14px;opacity:.6">ng/dL</span></div>
+          <div class="hstat-label">Testosterone</div>
+          <div class="hstat-trend trend-up">↑ +18% from baseline</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">Mar 6</div>
+          <div class="hstat-label">Next Appointment</div>
+          <div class="hstat-trend trend-flat">5 days away</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">8,240</div>
+          <div class="hstat-label">Steps Today</div>
+          <div class="hstat-trend trend-up">82% of daily goal</div>
+        </div>
       </div>
-    </main>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:28px">
+      <!-- Today's Tasks -->
+      <div class="card fade-in">
+        <div class="sec-header" style="margin-bottom:16px">
+          <div>
+            <div class="sec-title">Today's Tasks</div>
+            <div style="font-size:13px;color:var(--muted)">3 of 5 complete</div>
+          </div>
+          <div style="position:relative;width:44px;height:44px">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <circle cx="22" cy="22" r="18" fill="none" stroke="var(--pill)" stroke-width="4"/>
+              <circle cx="22" cy="22" r="18" fill="none" stroke="var(--green)" stroke-width="4" stroke-dasharray="113" stroke-dashoffset="${113-(3/5)*113}" stroke-linecap="round" class="progress-ring"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green)">3/5</div>
+          </div>
+        </div>
+        <div id="tasks-list">
+          <div class="task-item"><div class="task-check done" onclick="toggleTask(this)"></div><div><div class="task-text done">Testosterone injection (120mg)</div><div style="font-size:11px;color:var(--muted)">Left glute rotation</div></div><span class="task-category tc-supplement">Rx</span></div>
+          <div class="task-item"><div class="task-check done" onclick="toggleTask(this)"></div><div><div class="task-text done">Morning supplements</div><div style="font-size:11px;color:var(--muted)">Vitamin D, Fish Oil, Magnesium</div></div><span class="task-category tc-supplement">Supplement</span></div>
+          <div class="task-item"><div class="task-check done" onclick="toggleTask(this)"></div><div><div class="task-text done">Gym — Push day</div><div style="font-size:11px;color:var(--muted)">Chest, shoulders, triceps</div></div><span class="task-category tc-exercise">Exercise</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this)"></div><div><div class="task-text">Log sleep quality</div><div style="font-size:11px;color:var(--muted)">Rate last night's sleep</div></div><span class="task-category tc-habit">Habit</span></div>
+          <div class="task-item"><div class="task-check" onclick="toggleTask(this)"></div><div><div class="task-text">Anastrozole (0.25mg)</div><div style="font-size:11px;color:var(--muted)">Take with food</div></div><span class="task-category tc-supplement">Rx</span></div>
+        </div>
+      </div>
+
+      <!-- AI Insights + Message preview -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="insight-card">
+          <div class="ins-badge">✦ AI Insight</div>
+          <div class="ins-title">Your cortisol is running slightly high — here's what that means</div>
+          <div class="ins-body">Your AM cortisol came back at 24 mcg/dL, just above the 23 limit. This could explain the afternoon energy crashes you mentioned. Dr. Wilkess flagged this for your March 6th visit.</div>
+          <div class="ins-action" onclick="nav('pg-labs')">View your cortisol trend →</div>
+        </div>
+
+        <div class="card" style="padding:18px 20px">
+          <div class="sec-header" style="margin-bottom:12px">
+            <div style="font-size:15px;font-weight:600">Messages</div>
+            <div class="sec-link" onclick="nav('pg-messages')">View all</div>
+          </div>
+          <div class="msg-preview-row" onclick="nav('pg-messages')">
+            <div class="mp-av">AW</div>
+            <div style="flex:1;min-width:0">
+              <div class="mp-name">Dr. Wilkess</div>
+              <div class="mp-text">Hi Drew! Yes your results just came in...</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+              <div class="mp-time">10:31 AM</div>
+              <div class="mp-dot"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:18px 20px">
+          <div class="sec-header" style="margin-bottom:10px">
+            <div style="font-size:15px;font-weight:600">7-Day Adherence</div>
+            <div style="font-size:13px;font-weight:700;color:var(--lime)">72%</div>
+          </div>
+          <div class="adh-week">
+            ${[['M',55,'var(--amber)'],['T',60,'var(--amber)'],['W',65,'var(--lime)'],['T',68,'var(--lime)'],['F',70,'var(--lime)'],['S',72,'var(--lime)'],['S',72,'var(--lime)']].map(([d,v,c])=>`<div class="adh-day"><div class="adh-bar" style="height:${(v/100)*50}px;background:${c}"></div><div class="adh-lbl">${d}</div></div>`).join('')}
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:10px">
+            <span>Avg: 66%</span><span>Best: 72%</span><span>↑ Improving</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Biomarkers preview -->
+    <div class="section">
+      <div class="sec-header">
+        <div class="sec-title">Key Biomarkers</div>
+        <div class="sec-link" onclick="nav('pg-labs')">View full panel →</div>
+      </div>
+      <div class="grid-4">
+        <div class="bio-card card-hover" onclick="openBioModal('testosterone')">
+          <div class="bio-icon">⚡</div>
+          <div class="bio-name">Total Testosterone</div>
+          <div class="bio-val">620 <span class="bio-unit">ng/dL</span></div>
+          <div class="bio-ref">Ref: 300–900 ng/dL</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:55%;background:var(--green)"></div></div>
+          <div class="bio-status bs-green">Optimal</div>
+        </div>
+        <div class="bio-card card-hover" onclick="openBioModal('cortisol')">
+          <div class="bio-icon">🧠</div>
+          <div class="bio-name">Cortisol AM</div>
+          <div class="bio-val">24 <span class="bio-unit">mcg/dL</span></div>
+          <div class="bio-ref">Ref: 6–23 mcg/dL</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:85%;background:var(--amber)"></div></div>
+          <div class="bio-status bs-amber">Borderline</div>
+        </div>
+        <div class="bio-card card-hover" onclick="openBioModal('hba1c')">
+          <div class="bio-icon">🩸</div>
+          <div class="bio-name">HbA1c</div>
+          <div class="bio-val">5.4 <span class="bio-unit">%</span></div>
+          <div class="bio-ref">Ref: &lt; 5.7%</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:70%;background:var(--green)"></div></div>
+          <div class="bio-status bs-green">Normal</div>
+        </div>
+        <div class="bio-card card-hover" onclick="openBioModal('hdl')">
+          <div class="bio-icon">❤️</div>
+          <div class="bio-name">HDL Cholesterol</div>
+          <div class="bio-val">58 <span class="bio-unit">mg/dL</span></div>
+          <div class="bio-ref">Ref: &gt; 50 mg/dL</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:80%;background:var(--green)"></div></div>
+          <div class="bio-status bs-green">Optimal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming -->
+    <div class="card" style="margin-bottom:28px">
+      <div class="sec-header" style="margin-bottom:16px"><div class="sec-title">Upcoming</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--border)">
+          <div style="font-size:10px;font-weight:600;color:var(--brand);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">📅 Appointment</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:2px">Dr. Wilkess Visit</div>
+          <div style="font-size:13px;color:var(--muted)">March 6, 2026 · 10:00 AM</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:6px">Review lab results & protocol</div>
+        </div>
+        <div style="background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--border)">
+          <div style="font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">🧪 Labs Due</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:2px">Comprehensive Panel</div>
+          <div style="font-size:13px;color:var(--muted)">March 5, 2026 · Fasted</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:6px">Hormone + CBC + Metabolic</div>
+        </div>
+        <div style="background:var(--surface);border-radius:12px;padding:16px;border:1px solid var(--border)">
+          <div style="font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">💊 Refill</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:2px">90-Day Prescription</div>
+          <div style="font-size:13px;color:var(--muted)">March 10, 2026</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:6px">Testosterone Cypionate</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-  PAGE: PATIENT DETAIL
-══════════════════════════════════════ -->
-<div id="pg-detail" class="page">
+<!-- ══════════════════════════════════
+  PAGE: MY LABS
+══════════════════════════════════ -->
+<div id="pg-labs" class="page">
   <nav class="topnav">
-    <div class="brand" onclick="show('pg-list')"><svg width="28" height="28" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#7A4F2D" opacity=".15"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#7A4F2D" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#7A4F2D" stroke-width="1.3" stroke-linecap="round" opacity=".5"/></svg><span class="brand-name">Longevity Health</span></div>
-    <div class="user-pill"><div class="ua">AW</div><span class="un">Andrew Wilkess</span></div>
+    <div class="brand" onclick="nav('pg-home')"><svg width="26" height="26" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#C4956A" opacity=".3"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#C4956A" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></svg><span class="brand-name">Longevity Health</span></div>
+    <div class="nav-links"><div class="nl" onclick="nav('pg-home')">Home</div><div class="nl active">My Labs</div><div class="nl" onclick="nav('pg-protocol')">My Protocol</div><div class="nl" onclick="nav('pg-body')">My Body</div><div class="nl" onclick="nav('pg-messages')">Messages</div></div>
+    <div class="user-nav"><span class="user-greet">Hi, Drew</span><div class="user-av" onclick="nav('pg-profile')">DW</div></div>
   </nav>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="nav-item" onclick="show('pg-list')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="6" r="3"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Patients</div>
-      <div class="nav-item" onclick="show('pg-msgs')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4h12v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4z"/><path d="M3 4l6 5 6-5"/></svg>Messages<span class="nb">3</span></div>
-      <div class="nav-item" onclick="show('pg-settings')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1 1M12.9 12.9l1 1M4.1 13.9l1-1M12.9 5.1l1-1"/></svg>Settings</div>
-    </aside>
-    <main class="main fade" id="detail-main"></main>
+  <div class="content">
+    <div class="labs-hero">
+      <div class="labs-hero-left">
+        <div class="label">Latest Panel</div>
+        <div class="title">Your Lab Results</div>
+        <div class="sub">February 20, 2026 · Fasted 14 hours</div>
+      </div>
+      <div class="labs-score-grid">
+        <div class="lscore"><div class="lscore-val" style="color:var(--green)">8</div><div class="lscore-label">Optimal</div></div>
+        <div class="lscore"><div class="lscore-val" style="color:var(--amber)">1</div><div class="lscore-label">Borderline</div></div>
+        <div class="lscore"><div class="lscore-val" style="color:var(--red)">0</div><div class="lscore-label">Abnormal</div></div>
+        <div class="lscore"><div class="lscore-val">9</div><div class="lscore-label">Total</div></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:6px">
+      <span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span> Optimal range &nbsp;
+      <span style="width:10px;height:10px;border-radius:50%;background:var(--amber);display:inline-block"></span> Borderline &nbsp;
+      <span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block"></span> Outside range
+    </div>
+
+    <div class="lab-cat-title">⚡ Hormones</div>
+    <div class="bio-grid">
+      ${[
+        {icon:'⚡',n:'Total Testosterone',v:'620',u:'ng/dL',ref:'300–900',pct:55,s:'green',emoji:'↑ +18% from baseline'},
+        {icon:'🔬',n:'Free Testosterone',v:'18.2',u:'pg/mL',ref:'8.7–25',pct:58,s:'green',emoji:'In range'},
+        {icon:'🌸',n:'Estradiol (E2)',v:'28',u:'pg/mL',ref:'10–40',pct:60,s:'green',emoji:'Balanced'},
+        {icon:'🔗',n:'SHBG',v:'32',u:'nmol/L',ref:'10–57',pct:47,s:'green',emoji:'Normal'},
+        {icon:'🧠',n:'Cortisol AM',v:'24',u:'mcg/dL',ref:'6–23',pct:85,s:'amber',emoji:'↑ Slightly high'},
+        {icon:'🛡️',n:'PSA',v:'1.1',u:'ng/mL',ref:'< 4.0',pct:28,s:'green',emoji:'Normal'}
+      ].map(b=>`
+        <div class="bio-card card-hover" onclick="openBioModal('${b.n}')">
+          <div class="bio-icon">${b.icon}</div>
+          <div class="bio-name">${b.n}</div>
+          <div class="bio-val">${b.v} <span class="bio-unit">${b.u}</span></div>
+          <div class="bio-ref">Ref: ${b.ref}</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:${b.pct}%;background:var(--${b.s})"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+            <div class="bio-status bs-${b.s}">${b.s==='green'?'Optimal':b.s==='amber'?'Borderline':'Abnormal'}</div>
+            <div style="font-size:11px;color:var(--muted)">${b.emoji}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="lab-cat-title">🩸 Metabolic</div>
+    <div class="bio-grid">
+      ${[
+        {icon:'🩸',n:'HbA1c',v:'5.4',u:'%',ref:'< 5.7',pct:70,s:'green',emoji:'Normal'},
+        {icon:'🍬',n:'Fasting Glucose',v:'94',u:'mg/dL',ref:'70–99',pct:60,s:'green',emoji:'Normal'},
+        {icon:'💉',n:'Fasting Insulin',v:'8',u:'μIU/mL',ref:'2–19',pct:35,s:'green',emoji:'Optimal'},
+      ].map(b=>`
+        <div class="bio-card card-hover" onclick="openBioModal('${b.n}')">
+          <div class="bio-icon">${b.icon}</div>
+          <div class="bio-name">${b.n}</div>
+          <div class="bio-val">${b.v} <span class="bio-unit">${b.u}</span></div>
+          <div class="bio-ref">Ref: ${b.ref}</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:${b.pct}%;background:var(--${b.s})"></div></div>
+          <div class="bio-status bs-${b.s}" style="margin-top:4px">${b.s==='green'?'Optimal':b.s==='amber'?'Borderline':'Abnormal'}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="lab-cat-title">❤️ Lipid Panel</div>
+    <div class="bio-grid">
+      ${[
+        {icon:'❤️',n:'Total Cholesterol',v:'188',u:'mg/dL',ref:'< 200',pct:55,s:'green',emoji:'Normal'},
+        {icon:'📉',n:'LDL',v:'98',u:'mg/dL',ref:'< 100',pct:65,s:'green',emoji:'Just under limit'},
+        {icon:'📈',n:'HDL',v:'58',u:'mg/dL',ref:'> 50',pct:80,s:'green',emoji:'Optimal'},
+        {icon:'💧',n:'Triglycerides',v:'122',u:'mg/dL',ref:'< 150',pct:45,s:'green',emoji:'Normal'},
+      ].map(b=>`
+        <div class="bio-card card-hover" onclick="openBioModal('${b.n}')">
+          <div class="bio-icon">${b.icon}</div>
+          <div class="bio-name">${b.n}</div>
+          <div class="bio-val">${b.v} <span class="bio-unit">${b.u}</span></div>
+          <div class="bio-ref">Ref: ${b.ref}</div>
+          <div class="bio-bar-track"><div class="bio-bar-fill" style="width:${b.pct}%;background:var(--${b.s})"></div></div>
+          <div class="bio-status bs-${b.s}" style="margin-top:4px">${b.s==='green'?'Optimal':b.s==='amber'?'Borderline':'Abnormal'}</div>
+        </div>`).join('')}
+    </div>
+    <div style="height:40px"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════════════
+  PAGE: MY PROTOCOL
+══════════════════════════════════ -->
+<div id="pg-protocol" class="page">
+  <nav class="topnav">
+    <div class="brand" onclick="nav('pg-home')"><svg width="26" height="26" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#C4956A" opacity=".3"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#C4956A" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></svg><span class="brand-name">Longevity Health</span></div>
+    <div class="nav-links"><div class="nl" onclick="nav('pg-home')">Home</div><div class="nl" onclick="nav('pg-labs')">My Labs</div><div class="nl active">My Protocol</div><div class="nl" onclick="nav('pg-body')">My Body</div><div class="nl" onclick="nav('pg-messages')">Messages</div></div>
+    <div class="user-nav"><span class="user-greet">Hi, Drew</span><div class="user-av" onclick="nav('pg-profile')">DW</div></div>
+  </nav>
+  <div class="content">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Prescribed by Dr. Wilkess</div>
+        <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:300;margin-bottom:6px">Your Care Plan</div>
+        <div style="font-size:14px;color:var(--muted)">Hormone Optimization Protocol · Last updated Feb 20, 2026</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Today's completion</div>
+        <div style="font-family:'Fraunces',serif;font-size:48px;font-weight:200;color:var(--lime);line-height:1">60<span style="font-size:22px">%</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Prescriptions -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:16px">💊</div>
+          <div style="font-size:16px;font-weight:600">Prescriptions</div>
+        </div>
+        ${[
+          {icon:'💉',name:'Testosterone Cypionate 120mg',desc:'IM injection, rotate glute/quad sites',freq:'Twice weekly · Tue & Fri',color:'var(--blue-bg)'},
+          {icon:'💊',name:'Anastrozole 0.25mg',desc:'Oral tablet, take with food to reduce estrogen',freq:'As prescribed — Mon/Thu',color:'var(--green-bg)'},
+        ].map(p=>`
+          <div class="protocol-row">
+            <div class="proto-icon" style="background:${p.color}">${p.icon}</div>
+            <div style="flex:1"><div class="proto-name">${p.name}</div><div class="proto-desc">${p.desc}</div><div class="proto-freq">${p.freq}</div></div>
+            <div class="proto-check done" onclick="this.classList.toggle('done')"></div>
+          </div>`).join('')}
+      </div>
+
+      <!-- Supplements -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:16px">🌿</div>
+          <div style="font-size:16px;font-weight:600">Supplements</div>
+        </div>
+        ${[
+          {icon:'☀️',name:'Vitamin D3 5,000 IU',desc:'Take with largest meal for best absorption',freq:'Daily with breakfast',color:'var(--amber-bg)'},
+          {icon:'🐟',name:'Fish Oil (Omega-3) 2g',desc:'EPA+DHA combination capsule',freq:'Daily with meal',color:'var(--blue-bg)'},
+          {icon:'😴',name:'Magnesium Glycinate 400mg',desc:'Supports sleep quality and testosterone production',freq:'Nightly before bed',color:'var(--green-bg)'},
+        ].map(p=>`
+          <div class="protocol-row">
+            <div class="proto-icon" style="background:${p.color}">${p.icon}</div>
+            <div style="flex:1"><div class="proto-name">${p.name}</div><div class="proto-desc">${p.desc}</div><div class="proto-freq">${p.freq}</div></div>
+            <div class="proto-check" onclick="this.classList.toggle('done')"></div>
+          </div>`).join('')}
+      </div>
+
+      <!-- Exercise -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--orange-bg);display:flex;align-items:center;justify-content:center;font-size:16px">🏋️</div>
+          <div style="font-size:16px;font-weight:600">Exercise Protocol</div>
+        </div>
+        ${[
+          {icon:'💪',name:'Resistance Training',desc:'Progressive overload. Log sets/reps in app.',freq:'3x / week minimum',color:'var(--orange-bg)'},
+          {icon:'🚴',name:'Zone 2 Cardio',desc:'Heart rate 120–140 bpm sustained. Walk, bike, or row.',freq:'2x / week · 30–45 min',color:'var(--blue-bg)'},
+        ].map(p=>`
+          <div class="protocol-row">
+            <div class="proto-icon" style="background:${p.color}">${p.icon}</div>
+            <div style="flex:1"><div class="proto-name">${p.name}</div><div class="proto-desc">${p.desc}</div><div class="proto-freq">${p.freq}</div></div>
+            <div class="proto-check" onclick="this.classList.toggle('done')"></div>
+          </div>`).join('')}
+      </div>
+
+      <!-- Habits -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:16px">🌙</div>
+          <div style="font-size:16px;font-weight:600">Lifestyle & Habits</div>
+        </div>
+        ${[
+          {icon:'😴',name:'Sleep 7–9 hours',desc:'No screens 1hr before bed. Target 10:30pm lights out.',freq:'Nightly',color:'var(--brand-light)'},
+          {icon:'🍽️',name:'Protein Target',desc:'Minimum 160g protein daily. Log in app.',freq:'Daily',color:'var(--green-bg)'},
+          {icon:'🧪',name:'Check-in & Log',desc:'Weekly mood, energy, and symptom check-in.',freq:'Every Sunday',color:'var(--amber-bg)'},
+        ].map(p=>`
+          <div class="protocol-row">
+            <div class="proto-icon" style="background:${p.color}">${p.icon}</div>
+            <div style="flex:1"><div class="proto-name">${p.name}</div><div class="proto-desc">${p.desc}</div><div class="proto-freq">${p.freq}</div></div>
+            <div class="proto-check" onclick="this.classList.toggle('done')"></div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Next labs -->
+    <div class="insight-card" style="margin-top:20px;margin-bottom:40px">
+      <div class="ins-badge">🧪 Next Labs Due</div>
+      <div class="ins-title">Comprehensive Panel — March 5, 2026</div>
+      <div class="ins-body">Fast for 12 hours prior. Include: Full hormone panel (testosterone, estradiol, SHBG, PSA), CBC, CMP, lipids, HbA1c, cortisol (AM draw before 9am).</div>
+      <div class="ins-action">View lab order →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+  PAGE: MY BODY (WEARABLE)
+══════════════════════════════════ -->
+<div id="pg-body" class="page">
+  <nav class="topnav">
+    <div class="brand" onclick="nav('pg-home')"><svg width="26" height="26" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#C4956A" opacity=".3"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#C4956A" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></svg><span class="brand-name">Longevity Health</span></div>
+    <div class="nav-links"><div class="nl" onclick="nav('pg-home')">Home</div><div class="nl" onclick="nav('pg-labs')">My Labs</div><div class="nl" onclick="nav('pg-protocol')">My Protocol</div><div class="nl active">My Body</div><div class="nl" onclick="nav('pg-messages')">Messages</div></div>
+    <div class="user-nav"><span class="user-greet">Hi, Drew</span><div class="user-av" onclick="nav('pg-profile')">DW</div></div>
+  </nav>
+  <div class="content">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:300;margin-bottom:4px">My Body</div>
+        <div style="font-size:14px;color:var(--muted)">Live data from your wearable · Synced 12 min ago</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="badge b-green">● Live</span>
+        <button class="btn btn-light btn-sm">Sync now</button>
+        <button class="btn btn-dark btn-sm">Connect device</button>
+      </div>
+    </div>
+
+    <!-- Today summary -->
+    <div style="background:var(--brand-dark);border-radius:20px;padding:28px 32px;margin-bottom:24px;display:grid;grid-template-columns:repeat(5,1fr);gap:20px">
+      ${[
+        {icon:'👣',label:'Steps',val:'8,240',unit:'/ 10,000',pct:82,col:'var(--lime)'},
+        {icon:'🔥',label:'Active Cal',val:'486',unit:'kcal',pct:68,col:'var(--orange)'},
+        {icon:'💤',label:'Sleep',val:'6.8',unit:'hrs',pct:75,col:'var(--blue)'},
+        {icon:'💚',label:'HRV',val:'52',unit:'ms',pct:72,col:'var(--green)'},
+        {icon:'❤️',label:'Resting HR',val:'62',unit:'bpm',pct:80,col:'var(--green)'},
+      ].map(m=>`
+        <div style="text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">${m.icon}</div>
+          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:#F5E6D0;line-height:1;margin-bottom:2px">${m.val}</div>
+          <div style="font-size:11px;color:rgba(245,230,208,.5);margin-bottom:8px">${m.unit}</div>
+          <div style="height:4px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden">
+            <div style="height:100%;width:${m.pct}%;background:${m.col};border-radius:999px"></div>
+          </div>
+          <div style="font-size:10px;color:rgba(245,230,208,.4);margin-top:4px;text-transform:uppercase;letter-spacing:.04em">${m.label}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Trend Charts -->
+    <div class="grid-2" style="margin-bottom:20px">
+      ${[
+        {title:'Steps',unit:'steps/day',data:[7200,8100,7800,8400,8000,8240,8240],goal:10000,color:'var(--lime)',icon:'👣'},
+        {title:'Sleep',unit:'hours',data:[6.2,7.1,6.8,7.0,6.5,6.8,6.8],goal:8,color:'var(--blue)',icon:'💤'},
+        {title:'HRV',unit:'ms (higher = better)',data:[48,50,49,52,51,52,52],goal:60,color:'var(--green)',icon:'💚'},
+        {title:'Resting Heart Rate',unit:'bpm (lower = better)',data:[66,64,63,62,63,62,62],goal:55,color:'var(--red)',icon:'❤️'},
+      ].map(m=>{
+        const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        const mn=Math.min(...m.data);const mx=Math.max(...m.data,mn+1);
+        const w=280;const h=60;
+        const pts=m.data.map((v,i)=>`${(i/(m.data.length-1))*w},${h-((v-mn)/(mx-mn))*50+5}`).join(' L');
+        const area=`M0,${h} L${pts} L${w},${h} Z`;
+        return`<div class="wear-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <span style="font-size:20px">${m.icon}</span>
+            <div>
+              <div style="font-size:15px;font-weight:600">${m.title}</div>
+              <div style="font-size:11px;color:var(--muted)">${m.unit}</div>
+            </div>
+            <div style="margin-left:auto;font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:${m.color}">${m.data[6]}</div>
+          </div>
+          <svg width="100%" height="70" viewBox="0 0 280 70" preserveAspectRatio="none">
+            <defs><linearGradient id="g${m.title.replace(' ','')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${m.color}" stop-opacity=".15"/><stop offset="100%" stop-color="${m.color}" stop-opacity="0"/></linearGradient></defs>
+            <path d="${area}" fill="url(#g${m.title.replace(' ','')})"/>
+            <path d="M${pts}" fill="none" stroke="${m.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div style="display:flex;justify-content:space-between;margin-top:6px">
+            ${days.map((d,i)=>`<div style="text-align:center"><div style="font-size:11px;font-weight:${i===6?700:400};color:${i===6?m.color:'var(--muted)'}">${m.data[i]}</div><div style="font-size:9px;color:var(--muted)">${d}</div></div>`).join('')}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- SpO2 + Calories -->
+    <div class="grid-2" style="margin-bottom:40px">
+      <div class="wear-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="font-size:20px">🫁</span>
+          <div><div style="font-size:15px;font-weight:600">Blood Oxygen (SpO₂)</div><div style="font-size:11px;color:var(--muted)">%</div></div>
+          <div style="margin-left:auto;font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:var(--green)">98%</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end;height:50px">
+          ${[99,98,99,98,99,98,98].map((v,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;height:${(v-95)*10}px;background:var(--green);border-radius:3px 3px 0 0;opacity:${i===6?1:0.5}"></div><div style="font-size:9px;color:var(--muted)">${['M','T','W','T','F','S','S'][i]}</div></div>`).join('')}
+        </div>
+      </div>
+      <div class="wear-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="font-size:20px">🔥</span>
+          <div><div style="font-size:15px;font-weight:600">Total Calories</div><div style="font-size:11px;color:var(--muted)">kcal burned</div></div>
+          <div style="margin-left:auto;font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:var(--orange)">2,180</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end;height:50px">
+          ${[2100,2200,2050,2300,2180,2140,2180].map((v,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;height:${((v-1900)/500)*40}px;background:var(--orange);border-radius:3px 3px 0 0;opacity:${i===6?1:0.5}"></div><div style="font-size:9px;color:var(--muted)">${['M','T','W','T','F','S','S'][i]}</div></div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
   PAGE: MESSAGES
-══════════════════════════════════════ -->
-<div id="pg-msgs" class="page">
+══════════════════════════════════ -->
+<div id="pg-messages" class="page">
   <nav class="topnav">
-    <div class="brand" onclick="show('pg-list')"><svg width="28" height="28" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#7A4F2D" opacity=".15"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#7A4F2D" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#7A4F2D" stroke-width="1.3" stroke-linecap="round" opacity=".5"/></svg><span class="brand-name">Longevity Health</span></div>
-    <div class="user-pill"><div class="ua">AW</div><span class="un">Andrew Wilkess</span></div>
+    <div class="brand" onclick="nav('pg-home')"><svg width="26" height="26" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#C4956A" opacity=".3"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#C4956A" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></svg><span class="brand-name">Longevity Health</span></div>
+    <div class="nav-links"><div class="nl" onclick="nav('pg-home')">Home</div><div class="nl" onclick="nav('pg-labs')">My Labs</div><div class="nl" onclick="nav('pg-protocol')">My Protocol</div><div class="nl" onclick="nav('pg-body')">My Body</div><div class="nl active">Messages</div></div>
+    <div class="user-nav"><span class="user-greet">Hi, Drew</span><div class="user-av" onclick="nav('pg-profile')">DW</div></div>
   </nav>
-  <div class="layout" style="flex:1">
-    <aside class="sidebar">
-      <div class="nav-item" onclick="show('pg-list')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="6" r="3"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Patients</div>
-      <div class="nav-item active"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4h12v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4z"/><path d="M3 4l6 5 6-5"/></svg>Messages<span class="nb">3</span></div>
-      <div class="nav-item" onclick="show('pg-settings')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1 1M12.9 12.9l1 1M4.1 13.9l1-1M12.9 5.1l1-1"/></svg>Settings</div>
-    </aside>
-    <div style="flex:1;display:flex;flex-direction:column">
-      <div class="msg-layout" style="flex:1">
-        <div class="msg-list">
-          <div class="msg-list-header">Messages</div>
-          <div class="msg-item active" onclick="selMsg(this,'Drew Wilkes','DW')"><div class="m-av">DW</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="m-name">Drew Wilkes</span><span class="m-time">10:24 AM</span></div><div class="m-prev">Are my lab results in yet?</div></div><div class="m-dot"></div></div>
-          <div class="msg-item" onclick="selMsg(this,'Maria Chen','MC')"><div class="m-av">MC</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="m-name">Maria Chen</span><span class="m-time">9:15 AM</span></div><div class="m-prev">Thank you for the updated care plan!</div></div></div>
-          <div class="msg-item" onclick="selMsg(this,'Robert Nguyen','RN')"><div class="m-av">RN</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="m-name">Robert Nguyen</span><span class="m-time">Yesterday</span></div><div class="m-prev">Sorry I missed my check-in this week</div></div><div class="m-dot"></div></div>
-          <div class="msg-item" onclick="selMsg(this,'James Harlow','JH')"><div class="m-av">JH</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="m-name">James Harlow</span><span class="m-time">Feb 25</span></div><div class="m-prev">Can we reschedule for next week?</div></div><div class="m-dot"></div></div>
-          <div class="msg-item" onclick="selMsg(this,'Sandra Patel','SP')"><div class="m-av">SP</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span class="m-name">Sandra Patel</span><span class="m-time">Feb 24</span></div><div class="m-prev">My bloodwork appointment is confirmed</div></div></div>
+  <div class="content" style="padding-top:28px">
+    <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;margin-bottom:20px">Messages</div>
+    <div class="msg-layout" style="height:580px">
+      <div class="msg-list-panel">
+        <div class="msg-list-hdr" style="font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;padding:16px 18px">Conversations</div>
+        <div class="msg-item active">
+          <div class="m-av">AW</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="m-name">Dr. Wilkess</span><span class="m-time">10:31 AM</span></div>
+            <div class="m-prev">Hi Drew! Yes your results just came in...</div>
+          </div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--brand);flex-shrink:0;margin-top:5px"></div>
         </div>
-        <div class="msg-main" style="flex:1">
-          <div class="msg-top">
-            <div><div style="font-size:15px;font-weight:600" id="m-name">Drew Wilkes</div><div style="font-size:12px;color:var(--muted)">Patient · Last active today</div></div>
-            <div style="display:flex;gap:8px"><button class="btn btn-light btn-sm" onclick="openPt('drew')">View Profile</button><button class="btn btn-dark btn-sm">Schedule Appt</button></div>
+        <div class="msg-item">
+          <div class="m-av" style="background:var(--surface)">LH</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="m-name">Care Team</span><span class="m-time">Yesterday</span></div>
+            <div class="m-prev">Your 90-day refill has been sent to the pharmacy</div>
           </div>
-          <div class="msg-thread" id="m-thread">
-            <div class="bw"><div class="bav" id="m-av">DW</div><div><div class="bubble b-them">Hi Dr. Wilkess — are my lab results from last week in yet? I've been checking the portal.</div><div class="b-time">10:24 AM</div></div></div>
-            <div class="bw me"><div class="bav" style="background:var(--brand-light);color:var(--brand)">AW</div><div><div class="bubble b-me">Hi Drew! Yes your results just came in. Testosterone is up 18% from baseline. Let's review at your March 6th appointment!</div><div class="b-time" style="text-align:right">10:31 AM</div></div></div>
-            <div class="bw"><div class="bav" id="m-av2">DW</div><div><div class="bubble b-them">That's great news! Should I continue the same supplement protocol until then?</div><div class="b-time">10:33 AM</div></div></div>
+        </div>
+      </div>
+      <div class="msg-main-panel" style="flex:1">
+        <div class="msg-main-hdr">
+          <div>
+            <div style="font-size:15px;font-weight:600">Dr. Andrew Wilkess, MD</div>
+            <div style="font-size:12px;color:var(--muted)">Longevity & Functional Medicine · Usually replies within 2 hours</div>
           </div>
-          <div class="msg-input-row">
-            <textarea class="msg-in" rows="1" placeholder="Type a message..." id="m-in"></textarea>
-            <button class="btn btn-dark" onclick="sendMsg()">Send</button>
-          </div>
+        </div>
+        <div class="msg-thread-area" id="patient-thread">
+          <div class="bw"><div class="bav" style="background:var(--brand-light);color:var(--brand)">AW</div><div><div class="bubble b-them">Hi Drew! Yes, your results just came in. Your testosterone is up 18% from baseline — that's a great response. Cortisol is slightly elevated so we'll talk through that at your March 6th visit. Keep up the current protocol until then.</div><div class="b-time">10:31 AM</div></div></div>
+          <div class="bw me"><div class="bav">DW</div><div><div class="bubble b-me">That's great news on the testosterone! Should I continue the same injection schedule until March 6th?</div><div class="b-time" style="text-align:right">10:33 AM</div></div></div>
+          <div class="bw"><div class="bav" style="background:var(--brand-light);color:var(--brand)">AW</div><div><div class="bubble b-them">Yes, keep the same 120mg twice weekly. Don't change anything before the appointment. See you March 6th!</div><div class="b-time">10:35 AM</div></div></div>
+        </div>
+        <div class="msg-input-area">
+          <textarea class="msg-textarea" rows="1" placeholder="Message Dr. Wilkess..." id="patient-msg-input"></textarea>
+          <button class="btn btn-dark" onclick="patientSendMsg()">Send</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-  PAGE: SETTINGS
-══════════════════════════════════════ -->
-<div id="pg-settings" class="page">
-  <nav class="topnav"><div class="brand" onclick="show('pg-list')"><svg width="28" height="28" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#7A4F2D" opacity=".15"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#7A4F2D" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#7A4F2D" stroke-width="1.3" stroke-linecap="round" opacity=".5"/></svg><span class="brand-name">Longevity Health</span></div><div class="user-pill"><div class="ua">AW</div><span class="un">Andrew Wilkess</span></div></nav>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="nav-item" onclick="show('pg-list')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="6" r="3"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Patients</div>
-      <div class="nav-item" onclick="show('pg-msgs')"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4h12v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4z"/><path d="M3 4l6 5 6-5"/></svg>Messages</div>
-      <div class="nav-item active"><svg class="ni" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 2v1.5M9 14.5V16M2 9h1.5M14.5 9H16M4.1 4.1l1 1M12.9 12.9l1 1M4.1 13.9l1-1M12.9 5.1l1-1"/></svg>Settings</div>
-    </aside>
-    <main style="flex:1;padding:36px 44px">
-      <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;margin-bottom:28px">Settings</div>
-      <div class="s-card">
-        <div style="display:flex;align-items:center;gap:18px;margin-bottom:22px">
-          <div style="width:68px;height:68px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--brand);border:2px solid var(--border)">AW</div>
-          <div><div style="font-size:17px;font-weight:600">Andrew Wilkess, MD</div><div style="font-size:13px;color:var(--muted)">Longevity & Functional Medicine</div><div style="font-size:12px;color:var(--brand);margin-top:3px">andrew@longevityhealth.com</div></div>
-          <button class="btn btn-light btn-sm" style="margin-left:auto">Edit Photo</button>
+<!-- ══════════════════════════════════
+  PAGE: PROFILE
+══════════════════════════════════ -->
+<div id="pg-profile" class="page">
+  <nav class="topnav">
+    <div class="brand" onclick="nav('pg-home')"><svg width="26" height="26" viewBox="0 0 30 30" fill="none"><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" fill="#C4956A" opacity=".3"/><path d="M15 26C15 26 5 20 5 11c0-4.4 4.6-8 10-8s10 3.6 10 8c0 9-10 15-10 15z" stroke="#C4956A" stroke-width="1.8" fill="none"/><path d="M15 26V10" stroke="#C4956A" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></svg><span class="brand-name">Longevity Health</span></div>
+    <div class="nav-links"><div class="nl" onclick="nav('pg-home')">Home</div><div class="nl" onclick="nav('pg-labs')">My Labs</div><div class="nl" onclick="nav('pg-protocol')">My Protocol</div><div class="nl" onclick="nav('pg-body')">My Body</div><div class="nl" onclick="nav('pg-messages')">Messages</div></div>
+    <div class="user-nav"><span class="user-greet">Hi, Drew</span><div class="user-av">DW</div></div>
+  </nav>
+  <div class="content">
+    <div class="profile-hero">
+      <div class="prof-av">DW</div>
+      <div>
+        <div class="prof-name">Drew Wilkes</div>
+        <div class="prof-goal">Goal: Hormone Optimization</div>
+        <div>
+          <span class="prof-pill">Age 44</span>
+          <span class="prof-pill">Male</span>
+          <span class="prof-pill">184 lbs</span>
+          <span class="prof-pill">Member since Nov 2025</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-          <div class="pd-field"><label>First Name</label><input class="pd-input" value="Andrew"></div>
-          <div class="pd-field"><label>Last Name</label><input class="pd-input" value="Wilkess"></div>
-          <div class="pd-field"><label>Specialty</label><input class="pd-input" value="Longevity & Functional Medicine"></div>
-          <div class="pd-field"><label>NPI Number</label><input class="pd-input" value="1234567890"></div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:rgba(245,230,208,.5);margin-bottom:4px">Health Score</div>
+        <div style="font-family:'Fraunces',serif;font-size:56px;font-weight:200;color:#F5E6D0;line-height:1">72</div>
+        <div style="font-size:12px;color:rgba(245,230,208,.45)">↑ +4 this week</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;margin-bottom:16px">Personal Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="field"><label>Full Name</label><input value="Drew Wilkes" style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;outline:none"></div>
+          <div class="field"><label>Date of Birth</label><input value="Mar 15, 1980" style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;outline:none"></div>
+          <div class="field"><label>Email</label><input value="a.wilkes310@yahoo.com" style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;outline:none"></div>
+          <div class="field"><label>Weight</label><input value="184 lbs" style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;outline:none"></div>
         </div>
-        <div style="display:flex;justify-content:flex-end"><button class="btn btn-dark btn-sm">Save Changes</button></div>
+        <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn btn-dark btn-sm">Save</button></div>
       </div>
-      <div class="s-card">
-        <div style="font-size:15px;font-weight:600;margin-bottom:14px">Notifications</div>
-        <div class="s-row"><div><div class="s-label">New patient messages</div><div class="s-sub">Get notified when patients send you a message</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="s-row"><div><div class="s-label">Low adherence alerts</div><div class="s-sub">Alert when a patient drops below 40%</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="s-row"><div><div class="s-label">Appointment reminders</div><div class="s-sub">24hr reminder before scheduled appointments</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="s-row"><div><div class="s-label">Lab result notifications</div><div class="s-sub">Notify when patient lab results are available</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;margin-bottom:16px">My Goals</div>
+        ${[
+          {icon:'⚡',goal:'Optimize testosterone to 700+ ng/dL',progress:88},
+          {icon:'💪',goal:'Gain 8 lbs lean muscle mass',progress:45},
+          {icon:'😴',goal:'Consistent 7.5+ hrs sleep nightly',progress:62},
+          {icon:'🏃',goal:'10,000 steps daily',progress:82},
+        ].map(g=>`
+          <div style="margin-bottom:14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+              <div style="font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px"><span>${g.icon}</span>${g.goal}</div>
+              <div style="font-size:12px;font-weight:700;color:${g.progress>=70?'var(--green)':g.progress>=40?'var(--amber)':'var(--orange)'}">${g.progress}%</div>
+            </div>
+            <div style="height:5px;background:var(--pill);border-radius:999px;overflow:hidden">
+              <div style="height:100%;width:${g.progress}%;background:${g.progress>=70?'var(--green)':g.progress>=40?'var(--lime)':'var(--orange)'};border-radius:999px"></div>
+            </div>
+          </div>`).join('')}
       </div>
-    </main>
+    </div>
+
+    <!-- My Care Team -->
+    <div class="card" style="margin-bottom:40px">
+      <div style="font-size:16px;font-weight:600;margin-bottom:16px">My Care Team</div>
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border-radius:12px;border:1px solid var(--border)">
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--brand)">AW</div>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:600">Dr. Andrew Wilkess, MD</div>
+          <div style="font-size:13px;color:var(--muted)">Longevity & Functional Medicine</div>
+          <div style="font-size:12px;color:var(--brand);margin-top:2px">Longevity Health · Miami, FL</div>
+        </div>
+        <button class="btn btn-dark btn-sm" onclick="nav('pg-messages')">Message</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- MODAL ADD PATIENT -->
-<div class="modal-overlay" id="m-add" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <div class="modal-title">Add new patient</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-      <div class="pd-field"><label>First Name</label><input class="pd-input" placeholder="Jane"></div>
-      <div class="pd-field"><label>Last Name</label><input class="pd-input" placeholder="Smith"></div>
-      <div class="pd-field"><label>Date of Birth</label><input class="pd-input" type="date"></div>
-      <div class="pd-field"><label>Phone</label><input class="pd-input" placeholder="(305) 555-0100"></div>
-      <div class="pd-field"><label>Email</label><input class="pd-input" type="email" placeholder="jane@email.com"></div>
-      <div class="pd-field"><label>Primary Goal</label><select class="pd-input"><option>Hormone Optimization</option><option>Weight Management</option><option>Longevity Protocol</option><option>Metabolic Health</option></select></div>
-    </div>
-    <div class="mf"><button class="btn btn-light" onclick="document.getElementById('m-add').classList.remove('open')">Cancel</button><button class="btn btn-dark" onclick="document.getElementById('m-add').classList.remove('open')">Add Patient</button></div>
+<!-- BIOMARKER DETAIL MODAL -->
+<div class="modal-overlay" id="bio-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="document.getElementById('bio-modal').classList.remove('open')">✕</button>
+    <div id="bio-modal-content"></div>
   </div>
 </div>
 
 <script>
-// ── DATA ──
-const PTS = {
-  drew:{name:'Drew Wilkes',initials:'DW',age:44,gender:'Male',dob:'Mar 15, 1980',email:'d.wilkes@gmail.com',weight:'184 LBS',id:'01KJJXQTJ0NDP9DSGB2X7B4SV8',adh:72,adhColor:'var(--lime)',goal:'Hormone Optimization',conditions:['Low T','Cortisol Dysregulation'],goals:['Increase Energy','Build Muscle'],medications:['Testosterone Cypionate','Anastrozole'],nextAppt:'Mar 6, 2026',riskLevel:'Moderate',riskScore:42,lastCheckin:'2 days ago',checkinNote:'Reported good energy, gym 3x this week',
-    adhWeek:[55,60,65,68,70,72,72],adh30:[50,52,55,58,60,62,65,66,68,70,71,72,72,71,72,70,72,72,71,73,72,72,72,71,72,72,70,72,71,72],
-    labs:[
-      {cat:'Hormones',items:[{n:'Total Testosterone',v:'620 ng/dL',ref:'300–900',pct:55,s:'green'},{n:'Free Testosterone',v:'18.2 pg/mL',ref:'8.7–25',pct:58,s:'green'},{n:'Estradiol (E2)',v:'28 pg/mL',ref:'10–40',pct:60,s:'green'},{n:'SHBG',v:'32 nmol/L',ref:'10–57',pct:47,s:'green'},{n:'PSA',v:'1.1 ng/mL',ref:'< 4.0',pct:28,s:'green'}]},
-      {cat:'Metabolic',items:[{n:'HbA1c',v:'5.4%',ref:'< 5.7',pct:70,s:'green'},{n:'Fasting Glucose',v:'94 mg/dL',ref:'70–99',pct:60,s:'green'},{n:'Cortisol AM',v:'24 mcg/dL',ref:'6–23',pct:85,s:'amber'},{n:'Insulin (Fasting)',v:'8 μIU/mL',ref:'2–19',pct:35,s:'green'}]},
-      {cat:'Lipid Panel',items:[{n:'Total Cholesterol',v:'188 mg/dL',ref:'< 200',pct:55,s:'green'},{n:'LDL',v:'98 mg/dL',ref:'< 100',pct:65,s:'green'},{n:'HDL',v:'58 mg/dL',ref:'> 50',pct:80,s:'green'},{n:'Triglycerides',v:'122 mg/dL',ref:'< 150',pct:45,s:'green'}]}
-    ],
-    carePlan:[
-      {t:'Testosterone Cypionate 120mg',d:'IM injection twice weekly. Rotate injection sites between glutes and quads.',f:'2x / week'},
-      {t:'Anastrozole 0.25mg',d:'Oral tablet to manage estrogen conversion. Adjust based on E2 bloodwork.',f:'As prescribed'},
-      {t:'Resistance Training',d:'Minimum 3 sessions/week. Progressive overload protocol. Log workouts in app.',f:'3x / week'},
-      {t:'Sleep Optimization',d:'Target 7–9 hours. No screens 1hr before bed. Magnesium glycinate 400mg nightly.',f:'Nightly'},
-      {t:'Comprehensive Lab Panel',d:'Full hormone panel, CBC, CMP, lipids, thyroid. Fasted for 12hrs prior.',f:'Every 6 weeks'},
-    ],
-    wearable:{steps:8240,sleep:6.8,hrv:52,rhr:62,spo2:98,calories:2180,stepsTrend:[7200,8100,7800,8400,8000,8240,8240],sleepTrend:[6.2,7.1,6.8,7.0,6.5,6.8,6.8],hrvTrend:[48,50,49,52,51,52,52]}
-  },
-  maria:{name:'Maria Chen',initials:'MC',age:52,gender:'Female',dob:'Jun 12, 1972',email:'m.chen@outlook.com',weight:'138 LBS',id:'01KJJX7RMC924BXP112LW9MNAT',adh:91,adhColor:'var(--green)',goal:'HRT / Hormone Optimization',conditions:['Menopause','Osteopenia'],goals:['Reduce Hot Flashes','Bone Density'],medications:['Estradiol Patch','Progesterone 100mg','Vitamin D3'],nextAppt:'Apr 1, 2026',riskLevel:'Low',riskScore:15,lastCheckin:'Today',checkinNote:'Feeling great, hot flashes nearly gone',
-    adhWeek:[82,85,88,89,90,91,91],adh30:[80,81,82,83,84,85,86,87,88,89,89,90,90,91,91,91,91,91,91,91,91,91,91,91,90,91,91,91,91,91],
-    labs:[{cat:'Hormones',items:[{n:'Estradiol (E2)',v:'82 pg/mL',ref:'60–100',pct:70,s:'green'},{n:'Progesterone',v:'2.1 ng/mL',ref:'1.5–10',pct:25,s:'green'},{n:'FSH',v:'18 mIU/mL',ref:'16–54',pct:20,s:'green'},{n:'LH',v:'12 mIU/mL',ref:'5–25',pct:35,s:'green'}]},{cat:'Thyroid + Vitamins',items:[{n:'TSH',v:'1.8 mIU/L',ref:'0.4–4.0',pct:38,s:'green'},{n:'Free T4',v:'1.2 ng/dL',ref:'0.8–1.8',pct:40,s:'green'},{n:'Vitamin D',v:'68 ng/mL',ref:'40–80',pct:70,s:'green'},{n:'Vitamin B12',v:'524 pg/mL',ref:'200–900',pct:47,s:'green'}]}],
-    carePlan:[{t:'Estradiol Patch 0.05mg',d:'Apply transdermal patch twice weekly. Rotate sites: abdomen, buttocks, inner arm.',f:'2x / week'},{t:'Progesterone 100mg',d:'Oral micronized progesterone at bedtime. Take with small snack.',f:'Nightly'},{t:'Calcium + Vitamin D3',d:'1200mg calcium with 5000 IU D3. Critical for bone density.',f:'Daily'},{t:'Weight-Bearing Exercise',d:'Resistance training essential for osteopenia management. Min 4x/week.',f:'4x / week'}],
-    wearable:{steps:9800,sleep:7.4,hrv:64,rhr:58,spo2:99,calories:1890,stepsTrend:[9200,9800,9400,10100,9600,9800,9800],sleepTrend:[7.0,7.4,7.2,7.5,7.4,7.4,7.4],hrvTrend:[60,62,61,64,63,64,64]}
-  },
-  robert:{name:'Robert Nguyen',initials:'RN',age:61,gender:'Male',dob:'Sep 22, 1963',email:'r.nguyen@yahoo.com',weight:'221 LBS',id:'01KJJX9KKRN482CXB884PQ3WTS',adh:47,adhColor:'var(--orange)',goal:'Metabolic Health',conditions:['Pre-diabetes','Dyslipidemia','Obesity'],goals:['Reverse Pre-diabetes','Lose 30 lbs'],medications:['Metformin 500mg','Fish Oil 3g'],nextAppt:'Mar 12, 2026',riskLevel:'High',riskScore:74,lastCheckin:'5 days ago',checkinNote:'Did not complete weekly check-in',
-    adhWeek:[70,65,58,52,50,47,47],adh30:[75,72,70,68,68,66,65,64,62,60,58,57,55,54,52,51,50,50,49,49,48,48,47,47,47,47,47,47,47,47],
-    labs:[{cat:'Metabolic',items:[{n:'Fasting Glucose',v:'108 mg/dL',ref:'70–99',pct:78,s:'amber'},{n:'HbA1c',v:'6.1%',ref:'< 5.7',pct:88,s:'red'},{n:'Insulin (Fasting)',v:'22 μIU/mL',ref:'2–19',pct:90,s:'red'},{n:'HOMA-IR',v:'5.9',ref:'< 2.0',pct:95,s:'red'}]},{cat:'Lipid Panel',items:[{n:'Triglycerides',v:'210 mg/dL',ref:'< 150',pct:92,s:'red'},{n:'HDL',v:'38 mg/dL',ref:'> 40',pct:85,s:'amber'},{n:'LDL',v:'118 mg/dL',ref:'< 100',pct:75,s:'amber'},{n:'Total Cholesterol',v:'228 mg/dL',ref:'< 200',pct:82,s:'amber'}]}],
-    carePlan:[{t:'Low Glycemic Diet',d:'Eliminate refined carbs. Target <100g net carbs/day. Log all meals in app.',f:'Daily'},{t:'Metformin 500mg',d:'Twice daily with meals. Monitor for GI side effects first 2 weeks.',f:'2x / day'},{t:'Zone 2 Cardio',d:'Maintain HR 120–140 bpm. Brisk walk or cycling. Build to 45 min sessions.',f:'5x / week'},{t:'Weekly Weigh-In',d:'Fasted Monday morning weight. Log in app with notes on how you feel.',f:'Weekly'}],
-    wearable:{steps:4200,sleep:5.9,hrv:31,rhr:74,spo2:97,calories:2680,stepsTrend:[6200,5400,4800,4600,4200,4200,4200],sleepTrend:[6.2,5.8,6.0,5.7,5.9,5.9,5.9],hrvTrend:[38,35,33,32,31,31,31]}
-  },
-  sandra:{name:'Sandra Patel',initials:'SP',age:47,gender:'Female',dob:'Dec 3, 1977',email:'s.patel@gmail.com',weight:'152 LBS',id:'01KJJXB2SP731DXA220NQ8PVRT',adh:83,adhColor:'var(--lime)',goal:'Longevity Protocol',conditions:['Omega-3 Deficiency'],goals:['Extend Healthspan','Reduce Inflammation'],medications:['Fish Oil 4g','Magnesium Glycinate','NMN 500mg'],nextAppt:'Mar 19, 2026',riskLevel:'Low',riskScore:22,lastCheckin:'Yesterday',checkinNote:'Completed fasting window, gym session done',
-    adhWeek:[75,78,80,81,83,82,83],adh30:[70,72,73,74,75,76,77,78,79,80,80,81,81,82,82,83,83,83,83,83,83,83,83,83,83,83,83,83,83,83],
-    labs:[{cat:'Longevity Markers',items:[{n:'hsCRP (Inflammation)',v:'0.8 mg/L',ref:'< 1.0',pct:45,s:'green'},{n:'Omega-3 Index',v:'6.2%',ref:'> 8%',pct:72,s:'amber'},{n:'ApoB',v:'88 mg/dL',ref:'< 90',pct:65,s:'green'},{n:'Homocysteine',v:'7.2 μmol/L',ref:'< 10',pct:40,s:'green'},{n:'Ferritin',v:'22 ng/mL',ref:'15–150',pct:15,s:'green'}]}],
-    carePlan:[{t:'Fish Oil 4g EPA+DHA',d:'Increase from 3g to improve Omega-3 Index. Take with largest meal.',f:'Daily'},{t:'Intermittent Fasting 16:8',d:'Eating window 12pm–8pm. Break fast with protein-rich meal. Log daily.',f:'Daily'},{t:'VO2 Max Training',d:'1x/week HIIT session: 4 min hard / 3 min recovery x 4 rounds.',f:'Weekly'},{t:'NMN 500mg',d:'NAD+ precursor for cellular energy and longevity support.',f:'Daily'}],
-    wearable:{steps:10400,sleep:7.8,hrv:71,rhr:56,spo2:99,calories:1920,stepsTrend:[9800,10200,10100,10400,10300,10400,10400],sleepTrend:[7.6,7.8,7.9,7.7,7.8,7.8,7.8],hrvTrend:[68,70,69,71,70,71,71]}
-  },
-  james:{name:'James Harlow',initials:'JH',age:55,gender:'Male',dob:'Apr 7, 1969',email:'j.harlow@hotmail.com',weight:'247 LBS',id:'01KJJXC4JH590EXB334QR7WZMK',adh:28,adhColor:'var(--red)',goal:'Weight Management',conditions:['Obesity','Low T','Hypothyroid (subclinical)'],goals:['Lose 40 lbs','Improve Energy'],medications:['None currently'],nextAppt:'Mar 5, 2026',riskLevel:'High',riskScore:81,lastCheckin:'9 days ago',checkinNote:'No recent activity in app',
-    adhWeek:[50,44,38,32,30,28,28],adh30:[62,60,58,56,54,52,50,48,46,44,42,40,38,36,35,34,33,32,31,30,30,29,28,28,28,28,28,28,28,28],
-    labs:[{cat:'Hormones',items:[{n:'Total Testosterone',v:'290 ng/dL',ref:'300–900',pct:88,s:'red'},{n:'Free Testosterone',v:'6.2 pg/mL',ref:'8.7–25',pct:92,s:'red'},{n:'TSH (Thyroid)',v:'3.8 mIU/L',ref:'0.4–4.0',pct:80,s:'amber'},{n:'DHEA-S',v:'82 mcg/dL',ref:'85–690',pct:85,s:'amber'}]},{cat:'Metabolic',items:[{n:'Fasting Insulin',v:'18 μIU/mL',ref:'2–19',pct:78,s:'amber'},{n:'BMI',v:'33.4',ref:'18.5–24.9',pct:95,s:'red'},{n:'HbA1c',v:'5.8%',ref:'< 5.7',pct:75,s:'amber'}]}],
-    carePlan:[{t:'Caloric Deficit',d:'500 cal/day deficit. Minimum 140g protein. Avoid alcohol completely.',f:'Daily'},{t:'Walking Program',d:'Start at 7,000 steps/day. Increase by 500 steps each week until 10,000.',f:'Daily'},{t:'Weekly Weigh-In + Photos',d:'Monday AM fasted. Log weight and take progress photos monthly.',f:'Weekly'},{t:'Accountability Check-in',d:'Phone check-in with care coordinator every 2 weeks.',f:'Bi-weekly'}],
-    wearable:{steps:3100,sleep:5.4,hrv:28,rhr:78,spo2:96,calories:3200,stepsTrend:[5200,4400,3800,3400,3200,3100,3100],sleepTrend:[5.8,5.6,5.4,5.2,5.4,5.4,5.4],hrvTrend:[34,31,29,28,28,28,28]}
-  },
-  lynn:{name:'Lynn Foster',initials:'LF',age:49,gender:'Female',dob:'Feb 18, 1976',email:'l.foster@gmail.com',weight:'168 LBS',id:'01KJJXD6LF803FXC447RS5YQNJ',adh:61,adhColor:'var(--amber)',goal:'Metabolic Health',conditions:['Hyperlipidemia','Vitamin D Deficiency'],goals:['Lower LDL','Improve Energy'],medications:['Fish Oil 3g','Vitamin D3 5000 IU'],nextAppt:'Apr 10, 2026',riskLevel:'Moderate',riskScore:55,lastCheckin:'3 days ago',checkinNote:'Following meal plan, missed 2 workouts',
-    adhWeek:[50,54,57,59,60,61,61],adh30:[44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,60,61,61,61,61,61,61,61,61,61,61,61,61,61],
-    labs:[{cat:'Lipid Panel',items:[{n:'Total Cholesterol',v:'215 mg/dL',ref:'< 200',pct:72,s:'amber'},{n:'LDL',v:'138 mg/dL',ref:'< 100',pct:88,s:'red'},{n:'HDL',v:'52 mg/dL',ref:'> 50',pct:25,s:'green'},{n:'Triglycerides',v:'168 mg/dL',ref:'< 150',pct:75,s:'amber'},{n:'ApoB',v:'110 mg/dL',ref:'< 90',pct:80,s:'amber'}]},{cat:'Vitamins',items:[{n:'Vitamin D',v:'31 ng/mL',ref:'40–80',pct:72,s:'amber'},{n:'Vitamin B12',v:'388 pg/mL',ref:'200–900',pct:27,s:'green'},{n:'Magnesium',v:'2.0 mg/dL',ref:'1.7–2.2',pct:38,s:'green'}]}],
-    carePlan:[{t:'Anti-Inflammatory Diet',d:'Mediterranean diet. Eliminate trans fats. 30g fiber/day. Limit saturated fat to <10%.',f:'Daily'},{t:'Vitamin D3 5000 IU',d:'Take with largest meal for best absorption. Recheck levels in 8 weeks.',f:'Daily'},{t:'Fish Oil 3g EPA+DHA',d:'Combined EPA+DHA for lipid management. Take with meal.',f:'Daily'},{t:'Aerobic Exercise',d:'30 min moderate intensity: brisk walk, cycling, or swimming.',f:'5x / week'}],
-    wearable:{steps:6800,sleep:7.0,hrv:44,rhr:68,spo2:98,calories:2040,stepsTrend:[5800,6200,6400,6600,6800,6800,6800],sleepTrend:[6.8,7.0,6.9,7.1,7.0,7.0,7.0],hrvTrend:[40,42,41,44,43,44,44]}
-  },
-  andrew:{name:'Andrew Wilkes',initials:'AW',age:38,gender:'Male',dob:'Aug 4, 1987',email:'a.wilkes310@yahoo.com',weight:'185 LBS',id:'01KJJX6HYD516AXP385NW6KRTT',adh:0,adhColor:'var(--red)',goal:'Longevity Protocol',conditions:['ADHD'],goals:['Increase Energy Levels'],medications:['Amoxicillin'],nextAppt:'Mar 3, 2026',riskLevel:'Unknown',riskScore:0,lastCheckin:'Never',checkinNote:'Onboarding not yet complete',
-    adhWeek:[0,0,0,0,0,0,0],adh30:new Array(30).fill(0),
-    labs:[{cat:'Initial Panel',items:[{n:'Total Testosterone',v:'380 ng/dL',ref:'300–900',pct:28,s:'amber'},{n:'Free Testosterone',v:'7.1 pg/mL',ref:'8.7–25',pct:88,s:'red'},{n:'IGF-1',v:'142 ng/mL',ref:'88–246',pct:35,s:'green'},{n:'DHEA-S',v:'98 mcg/dL',ref:'85–690',pct:10,s:'amber'}]}],
-    carePlan:[{t:'Baseline Assessment',d:'Complete health history, body composition, and comprehensive bloodwork.',f:'One-time'},{t:'Nutrition Protocol',d:'Mediterranean diet with protein target of 1.6g/kg body weight.',f:'Daily'},{t:'Exercise Protocol',d:'3x/week resistance + 2x/week zone 2 cardio.',f:'5x / week'}],
-    wearable:{steps:0,sleep:0,hrv:0,rhr:0,spo2:0,calories:0,stepsTrend:[0,0,0,0,0,0,0],sleepTrend:[0,0,0,0,0,0,0],hrvTrend:[0,0,0,0,0,0,0]}
-  }
-};
-
-let curPt = null, curTab = 'overview', noteSubTab = 'notes', soapOpen = false;
-
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
-
-function openPt(k){curPt=k;curTab='overview';renderDetail();show('pg-detail')}
-
-function switchTab(t){curTab=t;renderDetail();window.scrollTo(0,0)}
-
-function adhColor(v){return v>=70?'var(--green)':v>=50?'var(--lime)':v>=35?'var(--amber)':v>=20?'var(--orange)':'var(--red)'}
-
-function sparklinePath(data,w,h){
-  const max=Math.max(...data,1),min=Math.min(...data);
-  const range=max-min||1;
-  const pts=data.map((v,i)=>`${(i/(data.length-1))*w},${h-((v-min)/range)*(h-4)+2}`);
-  return 'M'+pts.join(' L');
+function nav(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function riskColor(s){return s==='Low'?'var(--green)':s==='Moderate'?'var(--amber)':'var(--red)'}
-
-function renderDetail(){
-  const p=PTS[curPt];
-  const TABS=['overview','patient-details','care-plan','labs','notes','wearable'];
-  const LABELS=['Overview','Patient Details','Care plan','Labs & Diagnostics','Notes & Documents','Wearable Data'];
-  let h=`
-    <div class="pt-header">
-      <button class="back-btn" onclick="show('pg-list')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Back</button>
-      <div class="pt-name-row">
-        <div class="pt-avatar">${p.initials}</div>
-        <div class="pt-name">${p.name}</div>
-        <div style="margin-left:auto;display:flex;gap:8px">
-          <button class="btn btn-light btn-sm" onclick="show('pg-msgs')">Message</button>
-          <button class="btn btn-dark btn-sm">Schedule Appointment</button>
-        </div>
-      </div>
-      <div class="pt-tags">
-        <span class="pt-tag">Age ${p.age}</span>
-        <span class="pt-tag">${p.gender}</span>
-        <span class="pt-tag">${p.goal}</span>
-        <span class="badge ${p.adh>=70?'b-green':p.adh>=40?'b-orange':'b-red'}">${p.adh}% adherence</span>
-        <span class="badge b-blue">Next appt ${p.nextAppt}</span>
-      </div>
-    </div>
-    <div class="pt-tabs">
-      ${LABELS.map((l,i)=>`<div class="pt-tab ${curTab===TABS[i]?'active':''}" onclick="switchTab('${TABS[i]}')">${l}</div>`).join('')}
-    </div>
-    <div class="tab-content fade">
-  `;
-
-  // ── OVERVIEW ──
-  if(curTab==='overview'){
-    const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    const sp=p.adhWeek;
-    const w=300,hh=80;
-    const pathD=sp.map((v,i)=>`${i*(w/(sp.length-1))},${hh-((v/100)*(hh-8))+4}`).join(' L');
-    const areaD=`M0,${hh} L${pathD} L${w},${hh} Z`;
-    const riskCol=riskColor(p.riskLevel);
-
-    h+=`
-      <div class="ov-grid">
-        <!-- Patient Summary -->
-        <div class="card-white">
-          <div class="card-label">Patient Summary</div>
-          <div style="margin-bottom:16px">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Goal</div>
-            <div style="font-size:14px;font-weight:500">${p.goal}</div>
-          </div>
-          <div style="margin-bottom:16px">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Last check-in</div>
-            <div style="font-size:14px;font-weight:500">${p.lastCheckin}</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px;font-style:italic">"${p.checkinNote}"</div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:14px">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">7-day adherence</div>
-            <div style="display:flex;align-items:flex-end;gap:4px;height:44px">
-              ${sp.map((v,i)=>{const c=adhColor(v);const bh=Math.max((v/100)*40,2);return`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;height:${bh}px;background:${c};border-radius:3px 3px 0 0"></div><div style="font-size:9px;color:var(--muted)">${days[i].slice(0,1)}</div></div>`}).join('')}
-            </div>
-          </div>
-          <div style="margin-top:14px;text-align:center">
-            <div style="font-family:'Fraunces',serif;font-size:52px;font-weight:300;color:${adhColor(p.adh)};line-height:1">${p.adh}<span style="font-size:20px">%</span></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.04em">Tasks completed</div>
-          </div>
-        </div>
-
-        <!-- Risk Level -->
-        <div class="card-white">
-          <div class="card-label">Risk Level</div>
-          <div style="display:flex;flex-direction:column;align-items:center;padding:16px 0">
-            <svg width="130" height="75" viewBox="0 0 130 75" style="margin-bottom:8px">
-              <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--green)"/><stop offset="50%" stop-color="var(--amber)"/><stop offset="100%" stop-color="var(--red)"/></linearGradient></defs>
-              <path d="M10 65 A55 55 0 0 1 120 65" stroke="#EEE5D8" stroke-width="12" fill="none" stroke-linecap="round"/>
-              <path d="M10 65 A55 55 0 0 1 120 65" stroke="url(#rg)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="173" stroke-dashoffset="${173-(p.riskScore/100)*173}"/>
-              <text x="65" y="58" text-anchor="middle" font-family="Fraunces,serif" font-size="22" font-weight="300" fill="${riskCol}">${p.riskScore}</text>
-            </svg>
-            <div style="font-size:18px;font-weight:600;color:${riskCol}">${p.riskLevel}</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:4px;text-align:center">Risk score based on adherence,<br>labs & engagement</div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:14px">
-            ${p.conditions.slice(0,3).map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;color:var(--sub)"><span style="width:6px;height:6px;border-radius:50%;background:${riskCol};flex-shrink:0;display:inline-block"></span>${c}</div>`).join('')}
-          </div>
-        </div>
-
-        <!-- Adherence Trends -->
-        <div class="card-white">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div class="card-label" style="margin-bottom:0">Adherence trends</div>
-            <div class="time-toggle">
-              <div class="tt" onclick="this.parentNode.querySelectorAll('.tt').forEach(x=>x.classList.remove('active'));this.classList.add('active')">7D</div>
-              <div class="tt active">30D</div>
-              <div class="tt" onclick="this.parentNode.querySelectorAll('.tt').forEach(x=>x.classList.remove('active'));this.classList.add('active')">1Y</div>
-              <div class="tt" onclick="this.parentNode.querySelectorAll('.tt').forEach(x=>x.classList.remove('active'));this.classList.add('active')">Period</div>
-            </div>
-          </div>
-          ${p.adh===0?`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:120px;color:var(--muted)"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="1.5"/><path d="M14 9v6M14 17v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><div style="font-size:13px;margin-top:8px">No adherence data yet</div></div>`:`
-          <svg width="100%" height="110" viewBox="0 0 300 110" preserveAspectRatio="none" style="display:block">
-            <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${adhColor(p.adh)}" stop-opacity=".2"/><stop offset="100%" stop-color="${adhColor(p.adh)}" stop-opacity="0"/></linearGradient></defs>
-            <path d="M0 110 L${p.adh30.map((v,i)=>`${(i/(p.adh30.length-1))*300},${110-((v/100)*100)}`).join(' L')} L300 110 Z" fill="url(#ag)"/>
-            <path d="M${p.adh30.map((v,i)=>`${(i/(p.adh30.length-1))*300},${110-((v/100)*100)}`).join(' L')}" fill="none" stroke="${adhColor(p.adh)}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px;padding:0 4px"><span>30 days ago</span><span>Today</span></div>
-          <div style="display:flex;gap:16px;margin-top:12px">
-            <div><div style="font-size:11px;color:var(--muted)">Avg adherence</div><div style="font-size:15px;font-weight:700;color:${adhColor(p.adh)}">${Math.round(p.adh30.reduce((a,b)=>a+b,0)/p.adh30.length)}%</div></div>
-            <div><div style="font-size:11px;color:var(--muted)">Best day</div><div style="font-size:15px;font-weight:700;color:var(--green)">${Math.max(...p.adh30)}%</div></div>
-            <div><div style="font-size:11px;color:var(--muted)">Trend</div><div class="${p.adh30[29]>p.adh30[0]?'trend-up':p.adh30[29]<p.adh30[0]?'trend-down':'trend-flat'}">${p.adh30[29]>p.adh30[0]?'↑ Improving':p.adh30[29]<p.adh30[0]?'↓ Declining':'→ Stable'}</div></div>
-          </div>`}
-        </div>
-      </div>
-
-      <!-- Bottom Row -->
-      <div class="ov-bottom">
-        <!-- Quick Labs -->
-        <div class="card-white">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-            <div class="card-label" style="margin-bottom:0">Key Labs</div>
-            <button class="btn btn-light btn-sm" onclick="switchTab('labs')" style="font-size:11px;padding:4px 10px">View all</button>
-          </div>
-          ${(p.labs[0]?.items||[]).slice(0,4).map(l=>`
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-              <div style="font-size:13px;color:var(--sub)">${l.n}</div>
-              <div style="text-align:right"><div style="font-size:13px;font-weight:700;color:${l.s==='green'?'var(--green)':l.s==='amber'?'var(--amber)':'var(--red)'}">${l.v}</div></div>
-            </div>
-          `).join('')}
-          <div style="margin-top:10px"><button class="btn btn-light btn-sm" onclick="switchTab('labs')" style="font-size:12px;width:100%">+ Order Labs</button></div>
-        </div>
-
-        <!-- Active Protocol -->
-        <div class="card-white">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-            <div class="card-label" style="margin-bottom:0">Active Protocol</div>
-            <button class="btn btn-light btn-sm" onclick="switchTab('care-plan')" style="font-size:11px;padding:4px 10px">View all</button>
-          </div>
-          ${p.carePlan.slice(0,3).map((s,i)=>`
-            <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-              <div style="width:22px;height:22px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--brand);flex-shrink:0">${i+1}</div>
-              <div><div style="font-size:13px;font-weight:500">${s.t}</div><div style="font-size:11px;color:var(--muted)">${s.f}</div></div>
-            </div>
-          `).join('')}
-        </div>
-
-        <!-- Wearable Snapshot -->
-        <div class="card-white">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-            <div class="card-label" style="margin-bottom:0">Wearable Snapshot</div>
-            <button class="btn btn-light btn-sm" onclick="switchTab('wearable')" style="font-size:11px;padding:4px 10px">View all</button>
-          </div>
-          ${p.wearable.steps===0?`<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No device connected yet</div>`:`
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div style="background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border)">
-              <div style="font-size:18px;margin-bottom:2px">👣</div>
-              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:300">${p.wearable.steps.toLocaleString()}</div>
-              <div style="font-size:11px;color:var(--muted)">Steps today</div>
-            </div>
-            <div style="background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border)">
-              <div style="font-size:18px;margin-bottom:2px">💤</div>
-              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:300">${p.wearable.sleep}h</div>
-              <div style="font-size:11px;color:var(--muted)">Sleep last night</div>
-            </div>
-            <div style="background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border)">
-              <div style="font-size:18px;margin-bottom:2px">💚</div>
-              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:300">${p.wearable.hrv} <span style="font-size:12px;color:var(--muted)">ms</span></div>
-              <div style="font-size:11px;color:var(--muted)">HRV</div>
-            </div>
-            <div style="background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border)">
-              <div style="font-size:18px;margin-bottom:2px">❤️</div>
-              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:300">${p.wearable.rhr} <span style="font-size:12px;color:var(--muted)">bpm</span></div>
-              <div style="font-size:11px;color:var(--muted)">Resting HR</div>
-            </div>
-          </div>`}
-        </div>
-      </div>
-    `;
-  }
-
-  // ── PATIENT DETAILS ──
-  if(curTab==='patient-details'){
-    h+=`
-      <div class="pd-section">
-        <div class="pd-section-title">Patient Personal Details</div>
-        <div class="pd-section-hint">Click any field to edit</div>
-        <div class="pd-grid">
-          <div class="pd-field"><label>Full name *</label><input class="pd-input" value="${p.name}"></div>
-          <div class="pd-field"><label>Email address</label><input class="pd-input" value="${p.email}"></div>
-          <div class="pd-field"><label>Date of birth *</label><input class="pd-input" type="date" value="1980-03-15"></div>
-          <div class="pd-field"><label>Gender</label><select class="pd-input"><option>${p.gender}</option><option>Female</option><option>Other</option></select></div>
-          <div class="pd-field"><label>Weight</label><div style="position:relative"><input class="pd-input" value="${p.weight.split(' ')[0]}" style="padding-right:60px"><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);background:var(--surface);padding:2px 8px;border-radius:6px">LBS ▾</span></div></div>
-          <div class="pd-field"><label>Phone</label><input class="pd-input" placeholder="(305) 555-0100"></div>
-        </div>
-        <div style="display:flex;justify-content:flex-end"><button class="btn btn-dark btn-sm">Save Details</button></div>
-      </div>
-
-      <div class="pd-section">
-        <div class="pd-section-title">Patient Health Data</div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:8px">Conditions *</div>
-          <div>${p.conditions.map(c=>`<span class="tag-pill">${c}<span class="x">×</span></span>`).join('')}<button class="tag-add">+ Add ▾</button></div>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:8px">Goals</div>
-          <div>${p.goals.map(g=>`<span class="tag-pill">${g}<span class="x">×</span></span>`).join('')}<button class="tag-add">+ Add ▾</button></div>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:8px">Medications</div>
-          <div>${p.medications.map(m=>`<span class="tag-pill">${m}<span class="x">×</span></span>`).join('')}<button class="tag-add">+ Add ▾</button></div>
-        </div>
-      </div>
-      <button class="btn btn-dark" style="width:100%;justify-content:center;padding:14px">Save all changes</button>
-    `;
-  }
-
-  // ── CARE PLAN ──
-  if(curTab==='care-plan'){
-    h+=`
-      <div style="max-width:720px;margin:0 auto">
-        <div style="text-align:center;margin-bottom:28px">
-          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;margin-bottom:6px">Generate a Care Plan</div>
-          <div style="font-size:14px;color:var(--muted)">Upload blood work or lab results, then configure the protocol below</div>
-        </div>
-
-        <div class="card-white" style="margin-bottom:16px">
-          <div style="font-size:14px;font-weight:600;margin-bottom:14px">Upload Blood Report / Lab Results</div>
-          <div class="cp-upload" onclick="this.innerHTML='<div style=font-size:32px>✓</div><div style=font-size:15px;font-weight:600;margin-top:8px;color:var(--green)>File uploaded successfully</div>'">
-            <div class="cp-upload-icon">⬆</div>
-            <div class="cp-upload-title">Drop your file here, or browse</div>
-            <div class="cp-upload-sub">PDF up to 25MB</div>
-          </div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header" onclick="let b=this.nextElementSibling;b.classList.toggle('open');this.querySelector('.acc-arr').style.transform=b.classList.contains('open')?'rotate(180deg)':''">
-            Patient Goals <span class="acc-arr" style="transition:transform .2s">▾</span>
-          </div>
-          <div class="accordion-body open"><textarea class="cp-textarea" placeholder="E.g. Optimize testosterone, build muscle, improve sleep quality...">${p.goals.join(', ')}</textarea></div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header" onclick="let b=this.nextElementSibling;b.classList.toggle('open');this.querySelector('.acc-arr').style.transform=b.classList.contains('open')?'rotate(180deg)':''">
-            SOAP Notes <span class="acc-arr" style="transition:transform .2s">▾</span>
-          </div>
-          <div class="accordion-body"><textarea class="cp-textarea" placeholder="Subjective, Objective, Assessment, Plan..."></textarea></div>
-        </div>
-
-        <div class="accordion">
-          <div class="accordion-header" onclick="let b=this.nextElementSibling;b.classList.toggle('open');this.querySelector('.acc-arr').style.transform=b.classList.contains('open')?'rotate(180deg)':''">
-            Current Medications <span class="acc-arr" style="transition:transform .2s">▾</span>
-          </div>
-          <div class="accordion-body"><textarea class="cp-textarea" placeholder="List current medications and dosages...">${p.medications.join(', ')}</textarea></div>
-        </div>
-
-        <button class="btn btn-dark" style="width:100%;justify-content:center;padding:14px;margin:20px 0;font-size:15px">✦ Generate Care Plan with AI</button>
-
-        ${p.carePlan.length?`<div style="font-size:14px;font-weight:600;margin-bottom:14px;margin-top:8px">Active Protocol — ${p.carePlan.length} items</div>
-        ${p.carePlan.map((s,i)=>`<div class="cp-protocol-card"><div class="cp-step-num">${i+1}</div><div style="flex:1"><div class="cp-step-title">${s.t}</div><div class="cp-step-desc">${s.d}</div><div class="cp-step-freq">${s.f}</div></div><button class="btn btn-light btn-sm" style="flex-shrink:0;align-self:flex-start">Edit</button></div>`).join('')}`:''}
-      </div>
-    `;
-  }
-
-  // ── LABS ──
-  if(curTab==='labs'){
-    h+=`
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-        <div><div style="font-size:18px;font-weight:600">Labs & Diagnostics</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Last panel: ${p.labs[0]?.items?.[0] ? 'Feb 2026' : 'None on file'}</div></div>
-        <div style="display:flex;gap:8px"><button class="btn btn-light btn-sm">Filter</button><button class="btn btn-dark btn-sm">+ Order Labs</button></div>
-      </div>
-      ${p.labs.map(cat=>`
-        <div class="lab-section-title">${cat.cat}</div>
-        <div class="lab-header-row"><span>Marker</span><span>Result</span><span>Range bar</span><span>Reference</span></div>
-        ${cat.items.map(l=>{
-          const col=l.s==='green'?'var(--green)':l.s==='amber'?'var(--amber)':'var(--red)';
-          return`<div class="lab-row">
-            <div><div class="lab-name">${l.n}</div></div>
-            <div><div class="lab-val" style="color:${col}">${l.v}</div></div>
-            <div class="lab-bar-wrap"><div class="lab-bar-track"><div class="lab-bar-fill" style="width:${l.pct}%;background:${col}"></div></div></div>
-            <div><div style="font-size:12px;color:var(--muted)">${l.ref}</div><span class="badge ${l.s==='green'?'b-green':l.s==='amber'?'b-amber':'b-red'}" style="font-size:10px;padding:1px 7px;margin-top:3px">${l.s==='green'?'Normal':l.s==='amber'?'Borderline':'Abnormal'}</span></div>
-          </div>`;
-        }).join('')}
-      `).join('')}
-    `;
-  }
-
-  // ── NOTES ──
-  if(curTab==='notes'){
-    h+=`
-      <div class="note-subtabs">
-        <div class="note-subtab ${noteSubTab==='notes'?'active':''}" onclick="noteSubTab='notes';switchTab('notes')">Notes</div>
-        <div class="note-subtab ${noteSubTab==='docs'?'active':''}" onclick="noteSubTab='docs';switchTab('notes')">Documents</div>
-      </div>
-    `;
-    if(noteSubTab==='notes'){
-      h+=`
-        <div class="note-type-grid">
-          <div class="note-type-card primary" onclick="document.getElementById('soap-form').classList.toggle('open');document.getElementById('soap-btn-text').textContent=document.getElementById('soap-form').classList.contains('open')?'Cancel SOAP Note':'Start new note'">
-            <div class="note-type-icon note-icon-dark">📋</div>
-            <div><div class="note-type-title" id="soap-btn-text">Start new note</div><div class="note-type-sub">Create a structured SOAP note</div></div>
-          </div>
-          <div class="note-type-card" onclick="alert('Free-form note editor coming soon!')">
-            <div class="note-type-icon note-icon-light">💬</div>
-            <div><div class="note-type-title">New free-form note</div><div class="note-type-sub">Write assessment details without SOAP structure</div></div>
-          </div>
-        </div>
-
-        <div class="soap-form" id="soap-form">
-          <div style="font-size:15px;font-weight:600;margin-bottom:16px">SOAP Note — ${p.name}</div>
-          <div class="soap-section"><label>S — Subjective</label><textarea placeholder="Patient reports..."></textarea></div>
-          <div class="soap-section"><label>O — Objective</label><textarea placeholder="Vitals, exam findings, lab values..."></textarea></div>
-          <div class="soap-section"><label>A — Assessment</label><textarea placeholder="Diagnosis and clinical impression..."></textarea></div>
-          <div class="soap-section"><label>P — Plan</label><textarea placeholder="Treatment plan, follow-ups, prescriptions..."></textarea></div>
-          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-            <button class="btn btn-light btn-sm" onclick="document.getElementById('soap-form').classList.remove('open')">Cancel</button>
-            <button class="btn btn-dark btn-sm">Save Note</button>
-          </div>
-        </div>
-
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Showing 0 notes</div>
-        <div class="note-empty">No notes found. Create a SOAP or free-form note.</div>
-      `;
-    }else{
-      const files=[{n:'Lab Results — Feb 2026.pdf',s:'284 KB',d:'Feb 20, 2026',t:'pdf'},{n:'Intake Form.pdf',s:'142 KB',d:'Nov 14, 2025',t:'pdf'},{n:'Body Composition Scan.pdf',s:'1.2 MB',d:'Jan 30, 2026',t:'pdf'}];
-      h+=`
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-          <div style="font-size:13px;color:var(--muted)">Showing ${files.length} documents</div>
-          <button class="btn btn-dark btn-sm">+ Upload Document</button>
-        </div>
-        <div class="card-white">
-          ${files.map(f=>`
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);cursor:pointer" onmouseenter="this.style.background='var(--card)'" onmouseleave="this.style.background='transparent'">
-              <div style="width:36px;height:36px;border-radius:8px;background:var(--red-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📄</div>
-              <div style="flex:1"><div style="font-size:14px;font-weight:500">${f.n}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${f.s} · Uploaded ${f.d}</div></div>
-              <button class="btn btn-light btn-sm">Download</button>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-  }
-
-  // ── WEARABLE ──
-  if(curTab==='wearable'){
-    if(p.wearable.steps===0){
-      h+=`
-        <div class="card-white" style="text-align:center;padding:80px 40px">
-          <div style="font-size:48px;margin-bottom:16px">⌚</div>
-          <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:300;margin-bottom:8px">No device connected</div>
-          <div style="font-size:14px;color:var(--muted);margin-bottom:24px">Connect a wearable device to track real-time health metrics</div>
-          <button class="btn btn-dark">Connect Device</button>
-        </div>
-      `;
-    }else{
-      const wMetrics=[
-        {icon:'👣',label:'Steps today',val:p.wearable.steps.toLocaleString(),unit:'',trend:p.wearable.stepsTrend,col:'var(--blue)'},
-        {icon:'💤',label:'Sleep',val:p.wearable.sleep,unit:'hrs',trend:p.wearable.sleepTrend,col:'var(--brand)'},
-        {icon:'💚',label:'HRV',val:p.wearable.hrv,unit:'ms',trend:p.wearable.hrvTrend,col:'var(--green)'},
-        {icon:'❤️',label:'Resting HR',val:p.wearable.rhr,unit:'bpm',trend:[...p.wearable.hrvTrend].reverse(),col:'var(--red)'},
-        {icon:'🫁',label:'SpO₂',val:p.wearable.spo2,unit:'%',trend:[99,98,99,98,99,98,p.wearable.spo2],col:'var(--lime)'},
-        {icon:'🔥',label:'Calories',val:p.wearable.calories.toLocaleString(),unit:'kcal',trend:[2000,2100,2080,2200,2180,2140,p.wearable.calories],col:'var(--orange)'}
-      ];
-      h+=`
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-          <div style="font-size:18px;font-weight:600">Wearable Data</div>
-          <div style="display:flex;gap:8px"><span class="badge b-green" style="font-size:12px">● Live</span><button class="btn btn-light btn-sm">Sync now</button></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
-          ${wMetrics.map(m=>{
-            const sp=m.trend;const sw=160;const sh=40;
-            const mn=Math.min(...sp);const mx=Math.max(...sp,mn+1);
-            const pts=sp.map((v,i)=>`${(i/(sp.length-1))*sw},${sh-((v-mn)/(mx-mn||1))*(sh-4)+2}`).join(' L');
-            return`<div class="wd-metric">
-              <div class="wd-icon">${m.icon}</div>
-              <div class="wd-val">${m.val}<span class="wd-unit">${m.unit}</span></div>
-              <div class="wd-label">${m.label}</div>
-              <svg width="100%" height="40" viewBox="0 0 160 40" preserveAspectRatio="none">
-                <path d="M${pts}" fill="none" stroke="${m.col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>
-              </svg>
-              <div style="font-size:10px;color:var(--muted);display:flex;justify-content:space-between;margin-top:2px"><span>7 days ago</span><span>Today</span></div>
-            </div>`;
-          }).join('')}
-        </div>
-      `;
-    }
-  }
-
-  h+='</div>';
-  document.getElementById('detail-main').innerHTML=h;
+function toggleTask(el){
+  el.classList.toggle('done');
+  const txt=el.nextElementSibling?.querySelector?.('.task-text');
+  if(txt)txt.classList.toggle('done');
 }
 
-function selMsg(el,name,initials){
-  document.querySelectorAll('.msg-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('m-name').textContent=name;
-  document.getElementById('m-av').textContent=initials;
-  const av2=document.getElementById('m-av2');
-  if(av2)av2.textContent=initials;
-}
-
-function sendMsg(){
-  const inp=document.getElementById('m-in');
+function patientSendMsg(){
+  const inp=document.getElementById('patient-msg-input');
   const txt=inp.value.trim();
   if(!txt)return;
-  const thread=document.getElementById('m-thread');
+  const thread=document.getElementById('patient-thread');
   const div=document.createElement('div');
   div.className='bw me';
-  div.innerHTML=`<div class="bav" style="background:var(--brand-light);color:var(--brand)">AW</div><div><div class="bubble b-me">${txt}</div><div class="b-time" style="text-align:right">Just now</div></div>`;
+  div.innerHTML=`<div class="bav">DW</div><div><div class="bubble b-me">${txt}</div><div class="b-time" style="text-align:right">Just now</div></div>`;
   thread.appendChild(div);
   inp.value='';
   thread.scrollTop=thread.scrollHeight;
 }
+
+const bioData={
+  testosterone:{name:'Total Testosterone',val:'620 ng/dL',status:'Optimal',color:'var(--green)',ref:'300–900 ng/dL',context:'Testosterone drives muscle growth, energy, libido, and mood. Your level of 620 ng/dL is well within the optimal range. Dr. Wilkess has noted an 18% increase from your baseline of 527 ng/dL.',tip:'Your protocol is working well. Keep up the injection schedule and your training.'},
+  cortisol:{name:'Cortisol AM',val:'24 mcg/dL',status:'Borderline',color:'var(--amber)',ref:'6–23 mcg/dL',context:'AM cortisol is your stress hormone — measured in the morning when it should peak. Your level of 24 is just slightly above the normal ceiling of 23. This can cause afternoon crashes, sleep disruption, and blunted testosterone.',tip:'Dr. Wilkess flagged this for your March 6th appointment. Common culprits: poor sleep, under-eating, over-training. Track your sleep this week.'},
+  hba1c:{name:'HbA1c',val:'5.4%',status:'Normal',color:'var(--green)',ref:'< 5.7%',context:'HbA1c reflects your average blood sugar over the past 3 months. At 5.4% you are well below pre-diabetic range (5.7%) and far from diabetic range (6.5%). This is a key longevity marker.',tip:'Keep carb quality high, prioritize protein, and your metabolic health will stay strong.'},
+  hdl:{name:'HDL Cholesterol',val:'58 mg/dL',status:'Optimal',color:'var(--green)',ref:'> 50 mg/dL',context:'HDL is your "good" cholesterol — it helps remove LDL from your arteries. A score above 50 is good; above 60 is ideal. Your 58 is strong and trending upward with your Zone 2 cardio.',tip:'Zone 2 cardio is the #1 way to increase HDL. Your exercise protocol is directly driving this improvement.'},
+};
+
+function openBioModal(key){
+  const b=bioData[key.toLowerCase()]||bioData[Object.keys(bioData).find(k=>key.toLowerCase().includes(k))];
+  if(!b)return;
+  document.getElementById('bio-modal-content').innerHTML=`
+    <div style="margin-bottom:6px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Biomarker Detail</div>
+    <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;margin-bottom:4px">${b.name}</div>
+    <div style="font-family:'Fraunces',serif;font-size:48px;font-weight:200;color:${b.color};line-height:1;margin-bottom:4px">${b.val}</div>
+    <div style="margin-bottom:20px"><span class="badge ${b.color==='var(--green)'?'b-green':b.color==='var(--amber)'?'b-amber':'b-red'}" style="font-size:13px;padding:4px 12px">${b.status}</span> <span style="font-size:13px;color:var(--muted);margin-left:8px">Reference: ${b.ref}</span></div>
+    <div style="background:var(--surface);border-radius:12px;padding:16px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">What this means</div>
+      <div style="font-size:14px;line-height:1.6;color:var(--sub)">${b.context}</div>
+    </div>
+    <div style="background:var(--brand-light);border-radius:12px;padding:16px;border:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:600;color:var(--brand);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">✦ Dr. Wilkess's Note</div>
+      <div style="font-size:14px;line-height:1.6;color:var(--sub)">${b.tip}</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn btn-dark" style="flex:1;justify-content:center" onclick="document.getElementById('bio-modal').classList.remove('open')">Got it</button>
+      <button class="btn btn-light" style="flex:1;justify-content:center" onclick="nav('pg-messages');document.getElementById('bio-modal').classList.remove('open')">Ask Dr. Wilkess</button>
+    </div>
+  `;
+  document.getElementById('bio-modal').classList.add('open');
+}
 </script>
+
+<div class="mob-tabs" id="mob-tabs">
+  <div class="mob-tab active" id="mtab-patients" onclick="show('pg-list');setMobTab('patients')">
+    <div class="mob-tab-icon">👤</div>
+    <span>Patients</span>
+  </div>
+  <div class="mob-tab" id="mtab-msgs" onclick="show('pg-msgs');setMobTab('msgs')">
+    <div class="mob-tab-icon">💬</div>
+    <span>Messages</span>
+    <div class="mob-badge">3</div>
+  </div>
+  <div class="mob-tab" id="mtab-settings" onclick="show('pg-settings');setMobTab('settings')">
+    <div class="mob-tab-icon">⚙️</div>
+    <span>Settings</span>
+  </div>
+</div>
+
 </body>
 </html>
